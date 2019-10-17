@@ -10,8 +10,8 @@ import "fmt"
 
 func ChannelBufferedExp() {
 	messages := make(chan string, 2)
-	messages <- "hushichang"
-	messages <- "limanman"
+	messages <- "zhangsan"
+	messages <- "lisi"
 	fmt.Println(<-messages)
 	fmt.Println(<-messages)
 }

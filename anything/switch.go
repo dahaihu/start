@@ -40,7 +40,6 @@ func SwitchExp() {
 	default:
 		fmt.Println("It's after noon")
 	}
-
 	whatAmI := func(i interface{}) {
 		switch t := i.(type) {
 		case bool:

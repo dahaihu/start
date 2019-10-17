@@ -19,9 +19,11 @@ func RuntimeCallerExp() {
 		if !ok {
 			break
 		}
+		fmt.Println("original file is ", file)
 		file = filepath.Base(file)
 		fmt.Printf("file is %s \n", file)
 		f := runtime.FuncForPC(pc)
+		fmt.Println("函数指针name is ", f.Name())
 		fmt.Printf("aaa is %s\n", filepath.Base(f.Name()))
 		fmt.Printf("skip = %v, pc = %v, file = %v, line = %v, funcname = %s, f.entry() = %v \n", skip, pc, file, line, f.Name(), f.Entry())
 	}

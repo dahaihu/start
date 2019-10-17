@@ -48,7 +48,7 @@ func hehe() {
 
 		}
 	}
-	a := map[string]string{"hushichang": "hudahai"}
+	a := map[string]string{"zhangsan": "hudahai"}
 	fmt.Println("invalid result is ", a["hudahai"])
 	array := [3]*string{new(string), new(string), new(string)}
 	*array[0] = "Red"
@@ -211,7 +211,7 @@ func test(names ...string) string {
 	return strings.Join(names, " ")
 }
 func main() {
-	anything.SelectExp()
+	anything.ContextWithManyExp()
 }
 
 func testFallin() {

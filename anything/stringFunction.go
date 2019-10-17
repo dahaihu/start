@@ -12,9 +12,9 @@ import (
  */
 
 func StringFunctionExp() {
-	fmt.Println("contains: ", strings.Contains("hushichang", "shi"))
-	fmt.Println("count: ", strings.Count("hushichang", "shi"))
-	fmt.Println("split: ", strings.Split("hushichang", "shi"))
-	fmt.Println("upper: ", strings.ToUpper("hushichang"))
+	fmt.Println("contains: ", strings.Contains("zhangsan", "san"))
+	fmt.Println("count: ", strings.Count("zhangsan", "san"))
+	fmt.Println("split: ", strings.Split("zhangsan", "san"))
+	fmt.Println("upper: ", strings.ToUpper("zhangsan"))
 	fmt.Println("repeat: ", strings.Repeat("hu ", 5))
 }

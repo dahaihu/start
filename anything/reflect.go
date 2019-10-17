@@ -30,7 +30,7 @@ func TestReflect() {
 	for i:=0; i<elem.NumField(); i++ {
 		fmt.Println(elem.Field(i).Name)
 	}
-	inf := &User{2, "hushichang", 30}
+	inf := &User{2, "zhangsan", 30}
 	value := reflect.ValueOf(inf).Elem()
 	// 由于inf是指针类型，所以需要调用Elem()才能获取其真身
 	tmp := reflect.TypeOf(inf).Elem()
