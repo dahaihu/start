@@ -33,6 +33,7 @@ func Subsets(nums []int) [][]int {
 	}
 	return ret
 }
+
 // 区别是共享一个底层的数组
 // a := [4]int{0, 1, 2, 3, 4}
 // s := a[1:3]
@@ -48,6 +49,8 @@ func RightSubsets(nums []int) [][]int {
 		tmpRet := make([][]int, len(ret))
 		copy(tmpRet, ret)
 		for _, subset := range tmpRet {
+			// 这个地方不进行创建新的，而是在原来的subset进行append的话，可能会对原来的subset进行了修改
+			// 因为前面部分的subset底层的array肯能是相同的
 			newSubset := make([]int, len(subset)+1)
 			copy(newSubset, subset)
 			newSubset[len(subset)] = num
