@@ -175,7 +175,7 @@ location ~ \.(gif|jpg|png)$ {
 ```shell
 server {
     location / {
-        proxy_pass http://localhost:8080/;
+        proxy_pass http://localhost:8080;
     }
 
     location ~ \.(gif|jpg|png)$ {
