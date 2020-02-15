@@ -148,9 +148,5 @@ const verifyUser = async function(username, password){
 2. 异常处理更为简单，仅仅像在其他异步代码使用`try/catch`即可
 3. 调试更为简单。在`.then`代码块设置断点不会移动到下一个断点，`.then`只会执行同步代码。但是调试`async`函数就和调试同步代码一样
 
-
-
-
-
 **本文翻译自https://blog.hellojs.org/asynchronous-javascript-from-callback-hell-to-async-and-await-9b9ceb63c8e8**
 
