@@ -57,3 +57,33 @@ func MutexExp() {
 	mutex.Unlock()
 
 }
+
+func SimpleMutexExp() {
+	var mx sync.Mutex
+	var wg sync.WaitGroup
+	sum := 0
+	total := 0
+	for i := 1; i <= 10; i++ {
+		sum += i
+		wg.Add(1)
+		go func(wg *sync.WaitGroup, i int) {
+			defer wg.Done()
+			mx.Lock()
+			defer mx.Unlock()
+			total += i
+		}(&wg, i)
+	}
+	wg.Wait()
+	fmt.Printf("total:%d sum:%d\n", total, sum)
+}
+
+func OriginalExp() {
+	sum, total := 0, 0
+	for i := 1; i < 10; i++ {
+		sum += i
+		go func() {
+			total += i
+		}()
+	}
+	fmt.Printf("total:%d sum:%d\n", total, sum)
+}
