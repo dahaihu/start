@@ -6,13 +6,13 @@ package leetcode
 func Permute(nums []int) [][]int {
 	results := make([][]int, 0)
 	var _permute func([]int, []int)
-	_permute = func (nums []int, internalResult []int) {
+	_permute = func(nums []int, internalResult []int) {
 		if len(nums) == 1 {
 			internalResult = append(internalResult, nums[0])
 			results = append(results, internalResult)
 			return
 		}
-		for i := 0; i < len(nums); i++{
+		for i := 0; i < len(nums); i++ {
 			tmpInternalResult := make([]int, len(internalResult))
 			copy(tmpInternalResult, internalResult)
 			tmpInternalResult = append(tmpInternalResult, nums[i])
