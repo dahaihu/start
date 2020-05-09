@@ -36,19 +36,18 @@ import (
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 */
 
-func getPermutation(n int, k int) string {
+func GetPermutation(n int, k int) string {
+	res := bytes.Buffer{}
 	mark := make([]int, n)
 	mark[0] = 1
 	for i := 1; i < n; i++ {
-		mark[i] = i * mark[i-1]
+		mark[i] = mark[i-1] * i
 	}
 	items := make([]int, n)
 	for i := 0; i < n; i++ {
 		items[i] = i + 1
 	}
 	var idx, item int
-	res := bytes.Buffer{}
-
 	for true {
 		idx, k = k/mark[len(items)-1], k%mark[len(items)-1]
 		if k == 0 {
@@ -62,14 +61,13 @@ func getPermutation(n int, k int) string {
 		items, item = popKItem(items, idx)
 		res.WriteString(strconv.Itoa(item))
 		if k == 1 {
-			for i := 0; i <= len(items) - 1; i++ {
+			for i := 0; i < len(items); i++ {
 				res.WriteString(strconv.Itoa(items[i]))
 			}
 			break
 		}
+
 	}
-
-
 	return res.String()
 }
 func popKItem(items []int, idx int) ([]int, int) {
