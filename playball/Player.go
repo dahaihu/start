@@ -27,3 +27,7 @@ func Play(name string, court chan int) {
 		court <- ball
 	}
 }
+
+func test() {
+
+}
