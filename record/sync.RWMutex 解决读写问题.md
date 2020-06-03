@@ -348,12 +348,12 @@ fatal error: all goroutines are asleep - deadlock!
 >
 >>RLock
 >>
->>>Rlock
+>>>RLock
 >>>
 >>>>RLock
 >>>>
->>>>>**Lock**
+>>>>>**Lock**(表示加入的时机，并不参与递归的过程)
 >>>>>
 >>>>>>RLock
 >
->就会造成之前调用了`RLock`的读goroutine不会释放锁，也就是不会调用`RUnlock`方法。也就是说呢，写goroutine得不到执行的机会了，然后就会出执行过程出现问题。就和报错一样`fatal error: all goroutines are asleep - deadlock!`
+>因为有一个写 goroutine 来了，会阻塞后来的读 goroutine 的执行。后来的读 goroutine 不能执行了，也就是递归也执行不下去了。递归执行不下去，就会造成之前获得读锁得不到释放，然后就写 goroutine 也没有机会执行，造成的结果就是读 goroutine 和 写 goroutine 都不会执行。最后的结果就和报错一样`fatal error: all goroutines are asleep - deadlock!`
