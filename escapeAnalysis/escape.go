@@ -10,6 +10,7 @@ func main() {
 	u2 := createUserV2()
 
 	println("u1", &u1, "u2", u2)
+	println("u.name is ", u2.name)
 }
 
 //go:noinline
