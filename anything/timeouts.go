@@ -22,15 +22,16 @@ import (
 
 // 找时间测试一下，到底有没有可能成为孤儿进程以及如何检测 todo，进行扩展
 func TimeoutsExp() {
-	c1 := make(chan string, 1)
+	channel := make(chan string)
 	go func() {
-		time.Sleep(1 * time.Second)
-		c1 <- "work done"
+		time.Sleep(time.Millisecond * 500)
+		channel <- "hello"
 	}()
+
 	select {
-	case msg := <-c1:
-		fmt.Println("receive msg is ", msg)
-	case <- time.After(1 * time.Second):
+	case msg := <- channel:
+		fmt.Println("receive msg is", msg)
+	case <- time.After(time.Second):
 		fmt.Println("timeout")
 	}
 }
