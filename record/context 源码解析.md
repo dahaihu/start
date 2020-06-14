@@ -207,8 +207,14 @@ func removeChild(parent Context, child canceler) {
 由于这种删除操作是深度优先的，如果都传入`true`，则会从最底部的节点开始删除。并不会因为传入`true`，就会造成删除过程出现 bug。
 
 ### 其他类型
-
-至于`timerCtx`类型，就是包了一层的`cancelCtx`。可以定时到指定的时间执行`cancel`的操作，或者手动的执行`cancel`操作。而`valueCtx`也没什么说的，各位看看代码就可以理解了。
+调用方法有四种，分别如下
+1. WithCancel
+2. WithDeadline
+3. WithTimeout
+4. WithValue
+`WithDeadline`返回的是`timerCtx`类型，就是包了一层的`cancelCtx`。可以定时到指定的时间执行`cancel`的操作，或者手动的执行`cancel`操作。
+`WithTimeout`是转化为`WithDeadline`执行的。
+`WithValue`大家可以在网上找找例子看看如何使用，其返回的类型为`valueCtx`也没什么说的，各位看看代码就可以理解了。
 
 ## 总结
 
