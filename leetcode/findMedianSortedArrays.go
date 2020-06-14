@@ -1,5 +1,9 @@
 package leetcode
 
+import (
+	"math"
+)
+
 /**
 * @Author: 胡大海
 * @Date: 2019-11-03 11:06
@@ -59,3 +63,123 @@ func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
 		return float64(mark[length/2]+mark[(length/2)-1]) / 2
 	}
 }
+
+func FindMedianSortedArraysAnswer(nums1, nums2 []int) float64 {
+	m, n := len(nums1), len(nums2)
+	idx, remain := (m+n-1)/2, (m+n-1)%2
+	if remain == 0 {
+		return float64(findKth(nums1, nums2, 0, m-1, 0, n-1, idx))
+	}
+	return float64(findKth(nums1, nums2, 0, m-1, 0, n-1, idx)+findKth(nums1, nums2, 0, m-1, 0, n-1, idx+1)) / 2
+}
+
+func findKth(nums1, nums2 []int, start1, end1, start2, end2, k int) int {
+	if end1-start1 > end2-start2 {
+		return findKth(nums2, nums1, start2, end2, start1, end1, k)
+	}
+	if start1 > end1 {
+		return nums2[start2+k]
+	}
+	if k == 0 {
+		return minAB(nums1[start1], nums2[start2])
+	}
+	mid1 := minAB(end1, start1+((k+1)/2)-1)
+	mid2 := minAB(end2, start2+((k+1)/2)-1)
+	if nums1[mid1] > nums2[mid2] {
+		return findKth(nums1, nums2, start1, end1, mid2+1, end2, k-(mid2-start2+1))
+	}
+	return findKth(nums1, nums2, mid1+1, end1, start2, end2, k-(mid1-start1+1))
+}
+
+func minAB(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+func DivideSortedArrays(nums1, nums2 []int) (int, int) {
+	m, n := len(nums1), len(nums2)
+	k := (m + n + 1) / 2
+	left, right := 0, m
+	for left < right {
+		nums1Mid := left + (right-left)/2
+		nums2Mid := k - nums1Mid
+		if nums1[nums1Mid] < nums2[nums2Mid-1] {
+			left = nums1Mid + 1
+		} else {
+			right = nums1Mid
+		}
+	}
+	return left, k - left
+}
+
+func FindMedianSortedArrays(nums1, nums2 []int) float64 {
+	m, n := len(nums1), len(nums2)
+	if m > n {
+		return FindMedianSortedArrays(nums2, nums1)
+	}
+	k := (m + n + 1) / 2
+	left, right := 0, m
+	for left < right {
+		nums1Mid := left + (right-left)/2
+		nums2Mid := k - nums1Mid
+		if nums1[nums1Mid] < nums2[nums2Mid-1] {
+			left = nums1Mid + 1
+		} else {
+			right = nums1Mid
+		}
+	}
+	nums1Mid, nums2Mid := left, k-left
+	nums1Margin := math.MinInt64
+	nums2Margin := math.MinInt64
+	if nums1Mid > 0 {
+		nums1Margin = nums1[nums1Mid-1]
+	}
+	if nums2Mid > 0 {
+		nums2Margin = nums2[nums2Mid-1]
+	}
+	var c1 int
+	if nums1Margin > nums2Margin {
+		c1 = nums1Margin
+	} else {
+		c1 = nums2Margin
+	}
+	if (m+n+1)%2 == 0 {
+		return float64(c1)
+	}
+
+	nums1Margin = math.MaxInt64
+	nums2Margin = math.MaxInt64
+
+	if nums1Mid < m {
+		nums1Margin = nums1[nums1Mid]
+	}
+
+	if nums2Mid < n {
+		nums2Margin = nums2[nums2Mid]
+	}
+
+	var c2 int
+	if nums1Margin > nums2Margin {
+		c2 = nums2Margin
+	} else {
+		c2 = nums1Margin
+	}
+	return float64(c1+c2) / 2
+
+}
+
+func getIdxValue(nums []int, idx int, defaultValue int) int {
+	if idx >= 0 && idx < len(nums) {
+		return nums[idx]
+	}
+	return defaultValue
+}
+
+//func max(a, b int) int {
+//	if a > b {
+//		return a
+//	}
+//	return b
+//}
