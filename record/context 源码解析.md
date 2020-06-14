@@ -214,7 +214,9 @@ func removeChild(parent Context, child canceler) {
 4. WithValue
 
 `WithDeadline`返回的是`timerCtx`类型，就是包了一层的`cancelCtx`。可以定时到指定的时间执行`cancel`的操作，或者手动的执行`cancel`操作。
+
 `WithTimeout`是转化为`WithDeadline`执行的。
+
 `WithValue`大家可以在网上找找例子看看如何使用，其返回的类型为`valueCtx`也没什么说的，各位看看代码就可以理解了。
 
 ## 总结
