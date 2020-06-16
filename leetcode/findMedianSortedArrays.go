@@ -103,15 +103,60 @@ func DivideSortedArrays(nums1, nums2 []int) (int, int) {
 	k := (m + n + 1) / 2
 	left, right := 0, m
 	for left < right {
-		nums1Mid := left + (right-left)/2
-		nums2Mid := k - nums1Mid
-		if nums1[nums1Mid] < nums2[nums2Mid-1] {
-			left = nums1Mid + 1
+		mid1 := (right - left) / 2 + left
+		mid2 := k - mid1 - 1
+		if nums1[mid1] < nums2[mid2] {
+			if left == mid1 {
+				return left, k - left - 2
+			}
+			left = mid1
 		} else {
-			right = nums1Mid
+			right = mid1
 		}
 	}
-	return left, k - left
+	return right-1, k - right - 1
+}
+
+func getIdx(idx int, nums1, nums2 []int) int {
+	if idx + 1 <= len(nums1) {
+		return nums1[idx]
+	}
+	return nums2[idx - len(nums1)]
+}
+
+func GetMiddle(nums1, nums2 []int) float64 {
+	m, n := len(nums1), len(nums2)
+	mid := (m + n + 1) / 2
+	if (m + n + 1) % 2 == 0 {
+		return float64(getIdx(mid, nums1, nums2))
+	}
+	return float64(getIdx(mid, nums1, nums2) + getIdx(mid+1, nums1, nums2)) / 2
+
+}
+
+func getIdxDefault(nums []int, idx int, _default int) int {
+	if idx >= 0 && idx+1 <= len(nums) {
+		return nums[idx]
+	}
+	return _default
+}
+
+func Divided(nums1, nums2 []int) float64 {
+	m, n := len(nums1), len(nums2)
+	if m > n {
+		return Divided(nums2, nums1)
+	}
+	//if nums1[0] >= nums2[n-1] {
+	//	return GetMiddle(nums2, nums1)
+	//}
+	//if nums2[0] >= nums1[m-1] {
+	//	return GetMiddle(nums1, nums2)
+	//}
+	nums1Idx, nums2Idx := DivideSortedArrays(nums1, nums2)
+	if (m + n + 1) % 2 == 0 {
+		return float64(max(getIdxDefault(nums1, nums1Idx, math.MinInt64), getIdxDefault(nums2, nums2Idx, math.MinInt64)))
+	}
+	return float64(max(getIdxDefault(nums1, nums1Idx, math.MinInt64), getIdxDefault(nums2, nums2Idx, math.MinInt64)) + minAB(getIdxDefault(nums1, nums1Idx+1, math.MaxInt64), getIdxDefault(nums2, nums2Idx+1, math.MaxInt64))) / 2
 }
 
 func FindMedianSortedArrays(nums1, nums2 []int) float64 {
