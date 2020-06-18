@@ -104,8 +104,8 @@ func DivideSortedArrays(nums1, nums2 []int) (int, int) {
 	left, right := 0, m
 	for left < right {
 		mid1 := (right - left) / 2 + left
-		mid2 := k - mid1 - 1
-		if nums1[mid1] < nums2[mid2] {
+		mid2 := k - mid1
+		if nums1[mid1] < nums2[mid2 - 1] {
 			if left == mid1 {
 				return left, k - left - 2
 			}
@@ -167,12 +167,12 @@ func FindMedianSortedArrays(nums1, nums2 []int) float64 {
 	k := (m + n + 1) / 2
 	left, right := 0, m
 	for left < right {
-		nums1Mid := left + (right-left)/2
-		nums2Mid := k - nums1Mid
-		if nums1[nums1Mid] < nums2[nums2Mid-1] {
-			left = nums1Mid + 1
+		mid1 := (right - left)/2 +left
+		mid2 := k - mid1
+		if nums1[mid1] < nums2[mid2-1] {
+			left = mid1 + 1
 		} else {
-			right = nums1Mid
+			right = mid1
 		}
 	}
 	nums1Mid, nums2Mid := left, k-left

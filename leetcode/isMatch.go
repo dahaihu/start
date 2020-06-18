@@ -57,7 +57,6 @@ p = "mis*is*p*."
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 */
 
-
 // todo 写一个带着图的博客
 func IsMatch(s string, p string) bool {
 	m := len(s)

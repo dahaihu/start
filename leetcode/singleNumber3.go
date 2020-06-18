@@ -15,8 +15,8 @@ func singleNumber(nums []int) []int {
 	mark = mark & ((^mark) + 1)
 	nums1 := 0
 	nums2 := 0
-	for _, num := range nums{
-		if mark & num == 0 {
+	for _, num := range nums {
+		if mark&num == 0 {
 			nums1 ^= num
 		} else {
 			nums2 ^= num
