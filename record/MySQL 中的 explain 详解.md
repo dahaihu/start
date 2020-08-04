@@ -40,7 +40,7 @@
 
 - rows
 
-  `rows`表示的执行查询的过程中需要检测的行数。对于使用了殷勤 [InnoDB](https://dev.mysql.com/doc/refman/8.0/en/innodb-storage-engine.html) 的表来说，这个值仅仅是一个预估的值，并不会和实际的一样。
+  `rows`表示的执行查询的过程中需要检测的行数。对于使用了 [InnoDB](https://dev.mysql.com/doc/refman/8.0/en/innodb-storage-engine.html) 引擎的表来说，这个值仅仅是一个预估的值，并不会和实际的一样。
 
 - filtered
 
