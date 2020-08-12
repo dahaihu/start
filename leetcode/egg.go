@@ -5,53 +5,46 @@ package leetcode
 * @Date: 2020-03-20 09:02
 * A programmer who subconsciously views himself as an artist will enjoy what he does and will do it better ​
  */
-
+// K 代表鸡蛋的个数， N 代表楼层的高度
 func SuperEggDrop(K int, N int) [][]int {
 	mark := make([][]int, K)
-	for idx := 0; idx < K; idx++ {
-		mark[idx] = make([]int, N)
+	// 初始化二位数组
+	for i := 0; i < K; i++ {
+		mark[i] = make([]int, N)
+		// 在楼层是 1 的时候，次数都是1
+		mark[i][0] = 1
 	}
-	for idx := 0; idx < K; idx++ {
-		mark[idx][0] = 1
+	// 在只有一个鸡蛋的时候，只能从一楼不断的往上尝试
+	for i := 0; i < N; i++ {
+		mark[0][i] = i + 1
 	}
-	for idx := 0; idx < N; idx++ {
-		mark[0][idx] = idx + 1
-	}
-
-	for times := 2; times <= K; times++ {
-		for floors := 2; floors <= N; floors++ {
-			minVal := 2 << 30
-			for i := 1; i <= floors; i++ {
-				var breakCondition, noBreakCondition int
+	for egg := 2; egg <= K; egg++ {
+		for floor := 2; floor <= N; floor++ {
+			var noBreakCondition, breakCondition int
+			tmpValue := 100 * 10000
+			for i := 1; i <= floor; i++ {
 				if i == 1 {
 					breakCondition = 0
 				} else {
-					breakCondition = mark[times-1-1][i-1-1]
+					breakCondition = mark[egg-1-1][i-1-1]
 				}
-				if i == floors {
+
+				if i == floor {
 					noBreakCondition = 0
 				} else {
-					noBreakCondition = mark[times-1][floors-i-1]
+					noBreakCondition = mark[egg-1][floor-i-1]
 				}
-				tmpVal := max(breakCondition, noBreakCondition)
-				if tmpVal < minVal {
-					minVal = tmpVal
+
+				maxTmp := max(breakCondition, noBreakCondition)
+				if maxTmp < tmpValue {
+					tmpValue = maxTmp
 				}
 			}
-			mark[times-1][floors-1] = minVal + 1
+			mark[egg-1][floor-1] = tmpValue + 1
 		}
 	}
-	return mark
-}
 
-func min(arrays []int) int{
-	minVal := arrays[0]
-	for idx := 1; idx < len(arrays); idx++{
-		if arrays[idx] < minVal {
-			minVal = arrays[idx]
-		}
-	}
-	return minVal
+	return mark
 }
 
 func max(a, b int) int {
