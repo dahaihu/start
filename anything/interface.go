@@ -30,6 +30,7 @@ func (c circle) perm() float64 {
 
 var _ geometry = circle{}
 var _ geometry = rect{}
+var _ geometry = &square{}
 
 type rect struct {
 	width, height float64
