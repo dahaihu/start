@@ -38,34 +38,37 @@ import (
 
 func GetPermutation(n int, k int) string {
 	res := bytes.Buffer{}
-	items := make([]int, n)
 	mark := make([]int, n)
-	mark[0] = 1
-	items[0] = 1
-	for i := 1; i < n; i++ {
-		mark[i] = mark[i-1] * i
-		items[i] = i + 1
+	items := make([]int, n)
+	for i:=0; i<n; i++ {
+		if i==0 {
+			mark[i] = 1
+		} else {
+			mark[i] = i * mark[i-1]
+		}
+		items[i] = i+1
 	}
 	var idx int
-	for true {
-		idx, k = k / mark[len(items) - 1], k % mark[len(items) - 1]
+	for {
+		idx, k = k/mark[len(mark)-1], k%mark[len(mark)-1]
+
 		if k == 0 {
-			res.WriteString(strconv.Itoa(items[idx - 1]))
+			res.WriteString(strconv.Itoa(items[idx-1]))
 			items = popKItem(items, idx-1)
-			for i := len(items) - 1; i >=0; i-- {
+			for i := len(items)-1; i>=0; i-- {
 				res.WriteString(strconv.Itoa(items[i]))
 			}
 			break
 		}
 		res.WriteString(strconv.Itoa(items[idx]))
 		items = popKItem(items, idx)
+		mark = mark[:len(mark)-1]
 	}
 	return res.String()
 }
 
-
 func popKItem(items []int, idx int) []int {
-	res := make([]int, len(items) - 1)
+	res := make([]int, len(items)-1)
 	copy(res[:idx], items[:idx])
 	copy(res[idx:], items[idx+1:])
 	return res
