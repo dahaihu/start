@@ -1,9 +1,5 @@
 package leetcode
 
-import (
-	"math"
-)
-
 /**
 * @Author: 胡大海
 * @Date: 2019-11-03 11:06
@@ -64,36 +60,6 @@ func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
 	}
 }
 
-func FindMedianSortedArraysAnswer(nums1, nums2 []int) float64 {
-	m, n := len(nums1), len(nums2)
-	if (m+n+1)%2 == 0 {
-		return float64(findKth(nums1, nums2, 0, m-1, 0, n-1, (m+n+1)/2))
-	}
-	return float64(findKth(nums1, nums2, 0, m-1, 0, n-1, (m+n+1)/2) + findKth(nums1, nums2, 0, m-1, 0, n-1, (m+n+1)/2+1))/2
-}
-
-func findKth(nums1, nums2 []int, start1, end1, start2, end2, k int) int {
-	//fmt.Printf("nums1 is %v[%d:%d], nums2 is %v[%d:%d], k is %d\n", nums1, start1, end1, nums2, start2, end2, k)
-	// start <= end
-	// k is a number greater than 0
-	if end1 - start1 > end2 - start2 {
-		return findKth(nums2, nums1, start2, end2, start1, end1, k)
-	}
-	if start1 > end1 {
-		return nums2[start2+k-1]
-	}
-	// this is a special case
-	if k == 1 {
-		return min(nums1[start1], nums2[start2])
-	}
-	idx1 := min(end1, k/2 + start1 - 1)
-	idx2 := min(end2, k/2 + start2 - 1)
-	if nums1[idx1] < nums2[idx2] {
-		return findKth(nums1, nums2, idx1+1, end1, start2, end2, k-(idx1-start1+1))
-	}
-	return findKth(nums1, nums2, start1, end1, idx2+1, end2, k-(idx2-start2+1))
-}
-
 func min(a, b int) int {
 	if a <= b {
 		return a
@@ -103,54 +69,44 @@ func min(a, b int) int {
 
 func dividedTwoSortedArrays(nums1, nums2 []int) (int, int) {
 	m, n := len(nums1), len(nums2)
-	midAll := (m+n+1)/2
+	midAll := (m + n + 1) / 2
 	left, right := 0, m
 	for left < right {
-		p := (right-left)/2+left
+		p := (right-left)/2 + left
 		k := midAll - p
 		if nums2[k-1] < nums1[p] {
 			right = p
 		} else {
-			left = p+1
+			left = p + 1
 		}
 	}
-	return left, midAll-left
+	return left, midAll - left
 }
 
-func getIdxDefault(nums []int, idx int, defaultValue int) int {
-	if idx >= 0 && idx <= len(nums)-1 {
-		return nums[idx]
+// k 表示一个正整数, end是包含在边界内的数据
+func findKth(nums1 []int, start1, end1 int, nums2 []int, start2, end2 int, k int) int {
+	if end1-start1 > end2-start2 {
+		return findKth(nums2, start2, end2, nums1, start1, end1, k)
 	}
-	return defaultValue
+	if start1 > end1 {
+		return nums2[start2+k-1]
+	}
+	if k == 1 {
+		return min(nums1[start1], nums2[start2])
+	}
+	nums1Mid := min(start1+(k/2)-1, end1)
+	nums2Mid := min(start2+(k/2)-1, end2)
+	if nums1[nums1Mid] <= nums2[nums2Mid] {
+		return findKth(nums1, nums1Mid+1, end1, nums2, start2, end2, k-(nums1Mid-start1+1))
+	}
+	return findKth(nums1, start1, end1, nums2, nums2Mid+1, end2, k-(nums2Mid-start2+1))
 }
-
-//func max(a, b int) int {
-//	if a >= b {
-//		return a
-//	}
-//	return b
-//}
-
 
 func FindMedianSortedArrays(nums1, nums2 []int) float64 {
 	m, n := len(nums1), len(nums2)
-	if m > n {
-		return FindMedianSortedArrays(nums2, nums1)
+	if (m+n)%2 == 1 {
+		return float64(findKth(nums1, 0, len(nums1)-1, nums2, 0, len(nums2)-1, (m+n)/2+1))
 	}
-
-	nums1Mid, nums2Mid := dividedTwoSortedArrays(nums1, nums2)
-
-	nums1LeftMargin := getIdxDefault(nums1, nums1Mid-1, math.MinInt64)
-	nums2LeftMargin := getIdxDefault(nums2, nums2Mid-1, math.MinInt64)
-
-	c1 := max(nums1LeftMargin, nums2LeftMargin)
-	if (m+n+1)%2 == 0 {
-		return float64(c1)
-	}
-
-	nums1RightMargin := getIdxDefault(nums1, nums1Mid, math.MaxInt64)
-	nums2RightMargin := getIdxDefault(nums2, nums2Mid, math.MaxInt64)
-	c2 := min(nums1RightMargin, nums2RightMargin)
-	return float64(c1+c2)/2
+	return float64(findKth(nums1, 0, len(nums1)-1, nums2, 0, len(nums2)-1, (m+n)/2)+findKth(nums1, 0, len(nums1)-1, nums2, 0, len(nums2)-1, (m+n)/2+1)) / 2
 
 }

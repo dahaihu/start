@@ -7,7 +7,8 @@ import (
 
 func TestFindKth(t *testing.T) {
 	// how to get out of the closed quan
-	fmt.Println(findKth([]int{1}, []int{2, 3, 4, 5, 6}, 0, 0, 0, 4, 6))
+	fmt.Println(FindMedianSortedArrays([]int{1}, []int{2, 3, 4, 5, 6}))
+	fmt.Println(float64(19)/2)
 }
 
 func TestDividedSortedArrays(t *testing.T) {
