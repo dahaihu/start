@@ -28,6 +28,10 @@ func (c circle) perm() float64 {
 	return 2 * math.Pi * c.radius
 }
 
+var _ geometry = circle{}
+var _ geometry = rect{}
+var _ geometry = &square{}
+
 type rect struct {
 	width, height float64
 }
@@ -40,15 +44,21 @@ func (r rect) perm() float64 {
 	return 2*r.height + 2*r.width
 }
 
+type square struct {
+	width float64
+}
+
+func (s square) area() float64 {
+	return s.width * s.width
+}
+
+func (s square) perm() float64 {
+	return 4 * s.width
+}
+
 func measure(g geometry) {
 	fmt.Println(g)
 	fmt.Println(g.area())
 	fmt.Println(g.perm())
 }
 
-func InterfaceExp() {
-	r := rect{3, 4}
-	c := circle{10}
-	measure(r)
-	measure(c)
-}

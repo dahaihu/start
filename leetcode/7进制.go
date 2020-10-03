@@ -20,7 +20,7 @@ func ConvertToBase7(num int) string {
 		tag = "-"
 	}
 	var remaining int
-	for ;num != 0; {
+	for num != 0 {
 		// 下面两个顺序还不能反了
 		remaining, num = num % 7, num / 7
 		mark = append(mark, strconv.Itoa(remaining))
