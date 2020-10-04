@@ -22,18 +22,21 @@ func SelectExp() {
 	c2 := make(chan string)
 	go func() {
 		time.Sleep(time.Second)
-		c1 <- "one"
+		c1 <- "msg1"
 	}()
 	go func() {
-		time.Sleep(time.Second * 2)
-		c2 <- "two"
+		time.Sleep(2 * time.Second)
+		c2 <- "msg2"
 	}()
-	for i := 0; i < 2; i++ {
+
+	for i := 1; i <= 2; i++ {
 		select {
-		case msg1 := <-c1:
-			fmt.Println("receive", msg1)
-		case msg2 := <-c2:
-			fmt.Println("receive", msg2)
+		case msg1 := <- c1:
+			fmt.Println("receive msg is ", msg1)
+		case msg2 := <- c2:
+			fmt.Println("receive msg is ", msg2)
+		default:
+			fmt.Println("no channel is ready")
 		}
 	}
 }

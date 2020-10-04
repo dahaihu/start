@@ -1,6 +1,8 @@
 package anything
 
-import "fmt"
+import (
+	"fmt"
+)
 
 /**
 * @Author: 胡大海

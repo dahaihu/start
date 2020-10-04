@@ -17,3 +17,16 @@ func ArrayExp() {
 	}
 	fmt.Println(a)
 }
+
+
+
+func ArrayFunction(arr *[3]int) {
+
+}
+
+func ArrayTest() {
+	arr := [...]int{1, 2, 3}
+	brr := arr
+	brr[0] = 2
+	fmt.Printf("arr is %v, brr is %v\n", arr, brr)
+}

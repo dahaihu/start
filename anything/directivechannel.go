@@ -19,17 +19,16 @@ func ping(pings chan<- string, msg string) {
 
 // 下面的pongs参数替换的结果就是 <-pings，那么pings就是用来发送的了
 func pong(pings <-chan string, pongs chan<- string) {
+	// 不能直接发送的吗？？？
 	msg := <-pings
 	pongs <- msg
 }
-
-
 
 // 也可以理解参数中chan箭头的朝向吧，朝向chan就是仅仅用于接受，朝离chan就是仅仅用于发送
 func DirectiveChannelExp() {
 	pings := make(chan string, 1)
 	pongs := make(chan string, 1)
-	ping(pings, "胡世昌")
+	ping(pings, "hudahai")
 	pong(pings, pongs)
 	fmt.Println(<-pongs)
 }

@@ -13,7 +13,7 @@ func ClosingChannelExp() {
 	done := make(chan bool)
 	go func() {
 		for {
-			job, ok := <- jobs
+			job, ok := <-jobs
 			if ok {
 				fmt.Println("received job ", job)
 			} else {
@@ -29,5 +29,18 @@ func ClosingChannelExp() {
 		fmt.Println("send job ", i)
 	}
 	close(jobs)
-	<- done
+	<-done
+}
+
+func closingChannelSend() {
+	mark := make(chan int, 5)
+	for i := 0; i < 5; i++ {
+		mark <- i
+	}
+	close(mark)
+	var res int
+	//var ok bool
+	for res = range mark {
+		fmt.Println("res is ", res)
+	}
 }

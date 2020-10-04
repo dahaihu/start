@@ -14,15 +14,15 @@ import (
 
 // 如果需要给函数传递一个waitgroup，必须传递该值的指针
 func workerWait(id int, wg *sync.WaitGroup) {
-	fmt.Printf("Worker %d starting\n", id)
+	defer wg.Done()
+	fmt.Printf("worker %d start\n", id)
 	time.Sleep(time.Second)
-	fmt.Printf("Worker %d done\n", id)
-	wg.Done()
+	fmt.Printf("worker %d end\n", id)
 }
 
 func WaitGroupExp() {
 	var wg sync.WaitGroup
-	for i := 1; i < 5; i++ {
+	for i := 1; i <= 3; i++ {
 		wg.Add(1)
 		go workerWait(i, &wg)
 	}
