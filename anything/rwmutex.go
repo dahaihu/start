@@ -26,54 +26,53 @@ func init() {
 }
 
 func sleep() {
-	time.Sleep(time.Duration(rand.Intn(1000)) * time.Millisecond)
+	time.Sleep(time.Duration(rand.Intn(1000)) * time.Microsecond)
 }
 
-func reader(c chan int, m *sync.RWMutex, wg *sync.WaitGroup) {
-	defer wg.Wait()
-	m.RLock()
-	c <- 1
+func reader(wg *sync.WaitGroup, rw *sync.RWMutex, readerChan chan int) {
+	rw.RLock()
+	readerChan <- 1
 	sleep()
-	c <- -1
-	m.RUnlock()
+	readerChan <- -1
+	rw.RUnlock()
+	wg.Done()
 }
 
-func writer(c chan int, m *sync.RWMutex, wg *sync.WaitGroup) {
-	defer wg.Wait()
-	m.Lock()
-	c <- 1
+func writer(wg *sync.WaitGroup, rw *sync.RWMutex, writerChan chan int) {
+	rw.Lock()
+	writerChan <- 1
 	sleep()
-	c <- -1
-	m.Unlock()
+	writerChan <- -1
+	rw.Unlock()
+	wg.Done()
 }
 
 func RWLockExp() {
-	rw := sync.RWMutex{}
 	readerChan := make(chan int)
 	writerChan := make(chan int)
+	wg := sync.WaitGroup{}
+	rw := sync.RWMutex{}
 	var readerCount, writerCount int
 	go func() {
 		for {
-			select{
-			case val := <- readerChan:
+			select {
+			case val := <-readerChan:
 				readerCount += val
-			case val := <- writerChan:
+			case val := <-writerChan:
 				writerCount += val
 			}
-			fmt.Printf("%s%s\n", strings.Repeat("W", writerCount), strings.Repeat("R", readerCount))
+			fmt.Printf("%s%s\n", strings.Repeat("R", readerCount), strings.Repeat("W", writerCount))
 		}
 	}()
 
-	wg := sync.WaitGroup{}
-
-	for i:=0; i<3; i++ {
+	for i := 0; i < 3; i++ {
 		wg.Add(1)
-		go writer(writerChan, &rw, &wg)
+		go writer(&wg, &rw, writerChan)
 	}
 
-	for i:=0; i<10; i++ {
+	for i := 0; i < 10; i++ {
 		wg.Add(1)
-		go reader(readerChan, &rw, &wg)
+		go reader(&wg, &rw, readerChan)
 	}
 
 	wg.Wait()
