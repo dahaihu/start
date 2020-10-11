@@ -9,7 +9,7 @@ func quickSortSub(nums []int, start, end int) int {
 			left += 1
 		}
 		for nums[right] > nums[start] {
-			right -= 1
+			right -=1
 		}
 		if left > right {
 			break
@@ -23,12 +23,11 @@ func quickSortSub(nums []int, start, end int) int {
 }
 
 func quickSort(nums []int, start, end int) {
-	if start >= end {
-		return
+	if start <= end {
+		position := quickSortSub(nums, start, end)
+		quickSort(nums, start, position-1)
+		quickSort(nums, position+1, end)
 	}
-	idx := quickSortSub(nums, start, end)
-	quickSort(nums, start, idx-1)
-	quickSort(nums, idx+1, end)
 }
 
 
