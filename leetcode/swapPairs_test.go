@@ -6,9 +6,9 @@ import (
 )
 
 func TestSwapPairs(t *testing.T) {
-	head := &ListNode{Val: 0}
+	head := &ListNode{Val: 1}
 	pre := head
-	for i := 1; i < 5; i++ {
+	for i := 2; i < 5; i++ {
 		node := ListNode{Val: i}
 		pre.Next = &node
 		pre = &node
@@ -18,7 +18,7 @@ func TestSwapPairs(t *testing.T) {
 	//	head = head.Next
 	//}
 	// think myself as a sb
-	res := swapPairsRecur(head)
+	res := swapPairs(head)
 	for res != nil {
 		fmt.Println("val is ", res.Val)
 		res = res.Next

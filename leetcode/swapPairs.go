@@ -1,28 +1,21 @@
 package leetcode
 
-type ListNode struct {
-	Val int
-	Next *ListNode
-}
 func swapPairs(head *ListNode) *ListNode {
 	if head == nil || head.Next == nil {
 		return head
 	}
 	pre := &ListNode{}
-	pre.Next = head
-	res := pre
+	dummy := pre
 	for head != nil && head.Next != nil {
-		next := head.Next
-		nextHead := next.Next
+		next, nextHead := head.Next, head.Next.Next
 		pre.Next = next
 		next.Next = head
 		head.Next = nextHead
 		pre = head
 		head = nextHead
 	}
-	return res.Next
+	return dummy.Next
 }
-
 
 func swapPairsRecur(head *ListNode) *ListNode {
 	if head == nil || head.Next == nil {
