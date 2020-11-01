@@ -11,35 +11,28 @@ package leetcode
 // 时间复杂度应该如何取证呢？？？
 
 func adjust(idx int, margin int, array []int) {
-	maxIdx := 2*idx + 1
-	if maxIdx >= margin {
+	left := 2*idx + 1
+	if left >= margin {
 		return
 	}
-	if tmp := maxIdx + 1; tmp < margin && array[tmp] > array[maxIdx] {
-		maxIdx = tmp
+	mxChild := left
+	if right := left + 1; right < margin && array[right] > array[left] {
+		mxChild = right
 	}
-	if array[idx] >= array[maxIdx] {
+	if array[idx] >= array[mxChild] {
 		return
 	}
-
-	tmp := array[maxIdx]
-	array[maxIdx] = array[idx]
-	array[idx] = tmp
-
-	adjust(maxIdx, margin, array)
+	array[idx], array[mxChild] = array[mxChild], array[idx]
+	adjust(mxChild, margin, array)
 
 }
 
 func HeapSort(array []int) {
-	length := len(array)
-	for idx := (length - 1) / 2; idx >= 0; idx-- {
-		adjust(idx, length, array)
+	for i := len(array)/2 - 1; i >= 0; i-- {
+		adjust(i, len(array), array)
 	}
-	for idx := length - 1; idx >= 0; idx-- {
-		tmp := array[0]
-		array[0] = array[idx]
-		array[idx] = tmp
-		adjust(0, idx, array[:idx])
+	for i := len(array) - 1; i >= 0; i-- {
+		array[0], array[i] = array[i], array[0]
+		adjust(0, i, array)
 	}
-
 }

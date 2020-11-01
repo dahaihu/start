@@ -35,5 +35,6 @@ func TestQuickSort(t *testing.T) {
 	nums := randomSequence(1, 10)
 	nums[5] = 5
 	nums[8] = 5
-	quickMain(nums)
+	quickSort(nums, 0, len(nums)-1)
+	fmt.Printf("sorted array is %v\n", nums)
 }
