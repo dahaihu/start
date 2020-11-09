@@ -88,7 +88,7 @@ func dividedTwoSortedArrays(nums1, nums2 []int) (int, int) {
 func splitTwoSortedArrays(nums1, nums2 []int) (int, int) {
 	// to make unbalance
 	m, n := len(nums1), len(nums2)
-	allCount := (m + n) / 2
+	allCount := (m + n + 1) / 2
 	left, right := 0, m
 	for left < right {
 		mid1 := (right-left)/2 + left
@@ -108,11 +108,11 @@ func FindMedianSortedArraysUsingSplit(nums1, nums2 []int) float64 {
 		nums2, nums1 = nums1, nums2
 	}
 	nums1Mid, nums2Mid := splitTwoSortedArrays(nums1, nums2)
-	rightVal := float64(min(arrayDefaultValue(nums1, nums1Mid, math.MaxInt64), arrayDefaultValue(nums2, nums2Mid, math.MaxInt64)))
-	if (m+n)%2 == 1 {
-		return rightVal
-	}
 	leftVal := float64(max(arrayDefaultValue(nums1, nums1Mid-1, math.MinInt64), arrayDefaultValue(nums2, nums2Mid-1, math.MinInt64)))
+	if (m+n)%2 == 1 {
+		return leftVal
+	}
+	rightVal := float64(min(arrayDefaultValue(nums1, nums1Mid, math.MaxInt64), arrayDefaultValue(nums2, nums2Mid, math.MaxInt64)))
 	return (leftVal+rightVal)/2
 }
 
