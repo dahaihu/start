@@ -1,5 +1,7 @@
 package leetcode
 
+import "math"
+
 /**
 * @Author: 胡大海
 * @Date: 2019-11-03 11:06
@@ -81,6 +83,44 @@ func dividedTwoSortedArrays(nums1, nums2 []int) (int, int) {
 		}
 	}
 	return left, midAll - left
+}
+
+func splitTwoSortedArrays(nums1, nums2 []int) (int, int) {
+	// to make unbalance
+	m, n := len(nums1), len(nums2)
+	allCount := (m + n + 1) / 2
+	left, right := 0, m
+	for left < right {
+		mid1 := (right-left)/2 + left
+		mid2 := allCount - mid1
+		if nums1[mid1] >= nums2[mid2-1] {
+			right = mid1
+		} else {
+			left = mid1+1
+		}
+	}
+	return right, allCount-right
+}
+
+func FindMedianSortedArraysUsingSplit(nums1, nums2 []int) float64 {
+	m, n := len(nums1), len(nums2)
+	if m > n {
+		nums2, nums1 = nums1, nums2
+	}
+	nums1Mid, nums2Mid := splitTwoSortedArrays(nums1, nums2)
+	leftVal := float64(max(arrayDefaultValue(nums1, nums1Mid-1, math.MinInt64), arrayDefaultValue(nums2, nums2Mid-1, math.MinInt64)))
+	if (m+n)%2 == 1 {
+		return leftVal
+	}
+	rightVal := float64(min(arrayDefaultValue(nums1, nums1Mid, math.MaxInt64), arrayDefaultValue(nums2, nums2Mid, math.MaxInt64)))
+	return (leftVal+rightVal)/2
+}
+
+func arrayDefaultValue(nums []int, idx, defaultValue int) int {
+	if idx >= 0 && idx < len(nums) {
+		return nums[idx]
+	}
+	return defaultValue
 }
 
 // k 表示一个正整数, end是包含在边界内的数据

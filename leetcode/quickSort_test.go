@@ -2,11 +2,8 @@ package leetcode
 
 import (
 	"fmt"
-	"testing"
-)
-
-import (
 	"math/rand"
+	"testing"
 	"time"
 )
 

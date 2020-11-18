@@ -18,6 +18,10 @@ func TestSort(t *testing.T) {
 }
 
 func ExampleGetPermutation() {
+	a := [3]int{1, 2, 3}
+	b := a[:2:3]
+	b = append(b, 4)
+	//fmt.Println(a)
 	fmt.Println(GetPermutation(4, 9))
 	// Output: 2314
 }

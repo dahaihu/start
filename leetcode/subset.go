@@ -44,18 +44,18 @@ func Subsets(nums []int) [][]int {
 // 造成了对共享的数据的修改
 
 func RightSubsets(nums []int) [][]int {
-	ret := [][]int{{}}
+	results := make([][]int, 1)
+	results[0] = []int{}
 	for _, num := range nums {
-		tmpRet := make([][]int, len(ret))
-		copy(tmpRet, ret)
-		for _, subset := range tmpRet {
-			// 这个地方不进行创建新的，而是在原来的subset进行append的话，可能会对原来的subset进行了修改
-			// 因为前面部分的subset底层的array肯能是相同的
-			newSubset := make([]int, len(subset)+1)
-			copy(newSubset, subset)
-			newSubset[len(subset)] = num
-			ret = append(ret, newSubset)
+		levelLength := len(results)
+		for i:=0; i < levelLength; i++ {
+			result := results[i]
+			length := len(results[i])
+			tmpResult := make([]int, length+1)
+			copy(tmpResult[:length], result)
+			tmpResult[length] = num
+			results = append(results, tmpResult)
 		}
 	}
-	return ret
+	return results
 }

@@ -2,7 +2,7 @@ package leetcode
 
 import "fmt"
 
-func quickSortSub(nums []int, start, end int) int {
+func sub(nums []int, start, end int) int {
 	left, right := start+1, end
 	for {
 		for left <= right && nums[left] < nums[start] {
@@ -18,17 +18,16 @@ func quickSortSub(nums []int, start, end int) int {
 		left += 1
 		right -= 1
 	}
-	nums[start], nums[right] = nums[right], nums[start]
+	nums[right], nums[start] = nums[start], nums[right]
 	return right
 }
 
 func quickSort(nums []int, start, end int) {
-	if start >= end {
-		return
+	if start < end {
+		idx := sub(nums, start, end)
+		quickSort(nums, start, idx-1)
+		quickSort(nums, idx+1, end)
 	}
-	idx := quickSortSub(nums, start, end)
-	quickSort(nums, start, idx-1)
-	quickSort(nums, idx+1, end)
 }
 
 
