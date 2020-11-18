@@ -4,14 +4,14 @@ import "fmt"
 
 func quickSortSub(nums []int, start, end int) int {
 	left, right := start+1, end
-	for left <= right {
+	for {
 		for left <= right && nums[left] < nums[start] {
 			left += 1
 		}
 		for nums[right] > nums[start] {
 			right -= 1
 		}
-		if left > right {
+		if left >= right {
 			break
 		}
 		nums[left], nums[right] = nums[right], nums[left]

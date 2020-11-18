@@ -54,20 +54,20 @@ func GetPermutation(n int, k int) string {
 
 		if k == 0 {
 			res.WriteString(strconv.Itoa(items[idx-1]))
-			items = popKItem(items, idx-1)
+			items = pop(items, idx-1)
 			for i := len(items)-1; i>=0; i-- {
 				res.WriteString(strconv.Itoa(items[i]))
 			}
 			break
 		}
 		res.WriteString(strconv.Itoa(items[idx]))
-		items = popKItem(items, idx)
+		items = pop(items, idx)
 		mark = mark[:len(mark)-1]
 	}
 	return res.String()
 }
 
-func popKItem(items []int, idx int) []int {
+func pop(items []int, idx int) []int {
 	res := make([]int, len(items)-1)
 	copy(res[:idx], items[:idx])
 	copy(res[idx:], items[idx+1:])
