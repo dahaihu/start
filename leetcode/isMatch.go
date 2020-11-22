@@ -1,5 +1,7 @@
 package leetcode
 
+import "fmt"
+
 /**
 * @Author: 胡大海
 * @Date: 2019-11-10 12:15
@@ -84,6 +86,9 @@ func IsMatch(s string, p string) bool {
 				}
 			}
 		}
+	}
+	for _, ele := range mark {
+		fmt.Println(ele)
 	}
 	return mark[n][m]
 }
