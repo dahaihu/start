@@ -34,3 +34,12 @@ func TestQuickSort(t *testing.T) {
 	nums[5] = 5
 	quickMain(nums)
 }
+
+
+func TestSplit(t *testing.T) {
+	nums := randomSequence(1, 10)
+	nums[5] = 5
+	right, left := splitArray(nums, 5)
+	fmt.Println(right, left, nums)
+
+}

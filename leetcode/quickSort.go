@@ -30,8 +30,42 @@ func quickSort(nums []int, start, end int) {
 	}
 }
 
-
 func quickMain(nums []int) {
 	quickSort(nums, 0, len(nums)-1)
 	fmt.Println(nums)
 }
+
+func splitArray(nums []int, target int) (int, int) {
+	left := 0
+	for i := 0; i < len(nums); i++ {
+		if nums[i] == target {
+			nums[i], nums[left] = nums[left], nums[i]
+			left += 1
+		}
+	}
+	start, end := left, len(nums)-1
+	for {
+		for start <= end && nums[start] < target {
+			start += 1
+		}
+		for nums[end] > target {
+			end -= 1
+		}
+		if start >= end {
+			break
+		}
+		nums[start], nums[end] = nums[end], nums[start]
+		start += 1
+		end -= 1
+	}
+
+	resRight := end
+	for left > 0 {
+		nums[left-1], nums[end] = nums[end], nums[left-1]
+		left -= 1
+		end -= 1
+	}
+	return end+1, resRight
+}
+
+

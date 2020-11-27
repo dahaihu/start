@@ -17,15 +17,13 @@ func kthSmallest(matrix [][]int, k int) int {
 func check(matrix [][]int, mid, k, n int) bool {
 	i, j := n-1, 0
 	num := 0
-	for i >= 0 && j < n {
+	for i >= 0 && j <= n-1 {
 		if matrix[i][j] <= mid {
-			j++
+			j += 1
 			num += i+1
 		} else {
-			i--
-			//num += j
+			i -= 1
 		}
 	}
-	//num += j * (i+1)
 	return k <= num
 }
