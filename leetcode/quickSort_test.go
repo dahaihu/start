@@ -20,21 +20,26 @@ func randomSequence(min, max int) []int {
 	//初始化随机种子
 	rand.Seed(time.Now().Unix())
 
-	for i:=length-1; i >= 0; i-- {
-		idx := rand.Intn(i+1)
+	for i := length - 1; i >= 0; i-- {
+		idx := rand.Intn(i + 1)
 		arr[idx], arr[i] = arr[i], arr[idx]
 	}
 
 	return arr
 }
 
-
 func TestQuickSort(t *testing.T) {
-	fmt.Println(4 << (^uintptr(0) >> 63))
-	fmt.Println(4 << (^uintptr(0) >> 63))
+	nums := randomSequence(1, 10)
+	fmt.Println("nums is ", nums)
+	nums[5] = 5
+	quickMain(nums)
+}
+
+
+func TestSplit(t *testing.T) {
 	nums := randomSequence(1, 10)
 	nums[5] = 5
-	nums[8] = 5
-	quickSort(nums, 0, len(nums)-1)
-	fmt.Printf("sorted array is %v\n", nums)
+	right, left := splitArray(nums, 5)
+	fmt.Println(right, left, nums)
+
 }

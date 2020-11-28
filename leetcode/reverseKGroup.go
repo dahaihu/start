@@ -1,7 +1,6 @@
 package leetcode
 
-
-
+// very interesting
 func reverseKGroup(head *ListNode, k int) *ListNode {
 	var left, node, dummy, sentinel *ListNode
 	sentinel = &ListNode{}
