@@ -6,25 +6,27 @@ type element struct {
 }
 
 func largestRectangleArea(heights []int) int {
-
-	mark := make([]element, 0)
+	mark := make([]*element, 0, len(heights))
 	mx := 0
-	for idx, height := range heights {
-		if len(mark) == 0 {
-			mark = append(mark, element{idx: idx, height: height})
+	for idx, h := range heights {
+		if len(mark) == 0 || mark[len(mark)-1].height < h {
+			mark = append(mark, &element{idx: idx, height: h})
 			continue
 		}
-		for ele := mark[len(mark)-1]; ele.height <= height && len(mark) != 0; mark = mark[:len(mark)-1] {
-			if sum := (idx - ele.idx) * ele.height; sum > mx {
-				mx = sum
+		var preIdx int
+		for len(mark) != 0 && mark[len(mark)-1].height >= h {
+			ele := mark[len(mark)-1]
+			if tmp := (idx - ele.idx) * ele.height; tmp > mx {
+				mx = tmp
 			}
+			preIdx = ele.idx
+			mark = mark[:len(mark)-1]
 		}
-		mark = append(mark, element{idx: idx, height: height})
+		mark = append(mark, &element{idx: preIdx, height: h})
 	}
-
 	for _, ele := range mark {
-		if sum := ele.height * (len(heights) - ele.idx); sum > mx {
-			mx = sum
+		if tmp := (len(heights) - ele.idx) * ele.height; tmp > mx {
+			mx = tmp
 		}
 	}
 	return mx
