@@ -6,91 +6,90 @@ type Node struct {
 	key, val   int
 	prev, next *Node
 }
-
 type LRUCache struct {
-	head, leaf       *Node
-	capacity, length int
-	nodes            map[int]*Node
+	// root.prev is head
+	// root.next is tail
+	head, tail        *Node
+	m           map[int]*Node
+	length, cap int
 }
 
 func Constructor(capacity int) LRUCache {
-	return LRUCache{capacity: capacity, nodes: make(map[int]*Node)}
+	head := &Node{}
+	tail := &Node{}
+	head.next = tail
+	tail.prev = head
+	return LRUCache{length: 0, cap: capacity, head: head, tail: tail, m: make(map[int]*Node)}
 }
 
 func (this *LRUCache) Get(key int) int {
-	if node, ok := this.nodes[key]; ok {
-		if node == this.head {
-			return node.val
-		}
-		prev := node.prev
-		if node == this.leaf {
-			node.prev = nil
-			prev.next = nil
-			this.leaf = prev
-		} else {
-			node.prev.next, node.next.prev = node.next, node.prev
-		}
-		node.next = this.head
-		this.head.prev = node
-		this.head = node
+	if node, ok := this.m[key]; ok {
+		node.next.prev, node.prev.next = node.prev, node.next
+
+		tmp := this.head.next
+
+		tmp.prev = node
+		node.next = tmp
+
+		this.head.next = node
+		node.prev = this.head
+
 		return node.val
 	}
 	return -1
 }
 
 func (this *LRUCache) Put(key int, value int) {
-	// if exists, just change position
-	if node, ok := this.nodes[key]; ok {
+	if node, ok := this.m[key]; ok {
 		node.val = value
-		if node == this.head {
-			return
-		}
-		prev := node.prev
-		if node == this.leaf {
-			node.prev = nil
-			prev.next = nil
-			this.leaf = prev
-		} else {
-			node.prev.next, node.next.prev = node.next, node.prev
-		}
-		node.next = this.head
-		this.head.prev = node
-		this.head = node
+		node.next.prev, node.prev.next = node.prev, node.next
+
+		tmp := this.head.next
+
+		tmp.prev = node
+		node.next = tmp
+
+		this.head.next = node
+		node.prev = this.head
+
 		return
 	}
-	// not exists, create a new node
-	node := &Node{val: value, key: key}
-	this.nodes[key] = node
+	node := &Node{key: key, val: value}
+	realHead := this.head.next
+	realHead.prev = node
+	node.next = realHead
 
-	if this.length == 0 {
-		this.head = node
-		this.leaf = node
+	this.head.next = node
+	node.prev = this.head
+
+	this.m[key] = node
+
+	if this.length < this.cap {
 		this.length += 1
 		return
 	}
 
-	// put node in the first position, and change the head
-	node.next = this.head
-	this.head.prev = node
-	this.head = node
+	realTail := this.tail.prev
 
-	// if length < capacity
-	if this.length < this.capacity {
-		this.length += 1
-	} else {
-		leaf := this.leaf
-		prev := leaf.prev
-		prev.next = nil
-		leaf.prev = nil
-		this.leaf = prev
-		delete(this.nodes, leaf.key)
-	}
+	realTail.next.prev, realTail.prev.next = realTail.prev, realTail.next
+
+	realTail.next = nil
+	realTail.prev = nil
+	delete(this.m, realTail.key)
+	return
+
 }
 
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * obj := Constructor(capacity);
+ * param_1 := obj.Get(key);
+ * obj.Put(key,value);
+ */
 func (this *LRUCache) print() {
-	head := this.head
-	for head != nil {
-		if head.next == nil {
+	head := this.head.next
+	for {
+		if head.next == this.tail {
 			fmt.Printf("(%d, %d)", head.key, head.val)
 			break
 		}
