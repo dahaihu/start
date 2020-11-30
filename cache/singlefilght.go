@@ -14,6 +14,7 @@ func search() (interface{}, error) {
 }
 
 func StudyingSingleFlight() {
+	fmt.Printf("package variable a is %d\n", a)
 	g := singleflight.Group{}
 	wg := sync.WaitGroup{}
 	for i := 0; i < 1000; i++ {

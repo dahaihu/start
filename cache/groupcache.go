@@ -5,6 +5,8 @@ import (
 	"github.com/golang/groupcache/lru"
 )
 
+var a = 10
+
 func cacheExap() {
 	cache := lru.New(2)
 	cache.Add("bill", 20) // bill
