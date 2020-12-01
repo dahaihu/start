@@ -6,77 +6,83 @@ type Node struct {
 	key, val   int
 	prev, next *Node
 }
+
+func (node Node) changeVal(val int) {
+	node.val = val
+	fmt.Println(node.key, node.val)
+}
+
+func (node *Node) cchangeVal(val int) {
+	node.val = val
+	fmt.Println(node.key, node.val)
+}
+
 type LRUCache struct {
-	// root.prev is head
-	// root.next is tail
-	head, tail        *Node
+	head, tail  *Node
 	m           map[int]*Node
 	length, cap int
 }
 
 func Constructor(capacity int) LRUCache {
-	head := &Node{}
-	tail := &Node{}
+	head, tail := &Node{}, &Node{}
 	head.next = tail
 	tail.prev = head
-	return LRUCache{length: 0, cap: capacity, head: head, tail: tail, m: make(map[int]*Node)}
+	return LRUCache{head: head, tail: tail, length: 0, cap: capacity, m: make(map[int]*Node)}
 }
 
-func (this *LRUCache) Get(key int) int {
-	if node, ok := this.m[key]; ok {
-		node.next.prev, node.prev.next = node.prev, node.next
+func (lru *LRUCache) Get(key int) int {
+	if node, ok := lru.m[key]; ok {
+		// head
+		if node == lru.head.next {
+			return node.val
+		}
+		node.prev.next, node.next.prev = node.next, node.prev
 
-		tmp := this.head.next
-
-		tmp.prev = node
-		node.next = tmp
-
-		this.head.next = node
-		node.prev = this.head
+		head := lru.head.next
+		head.prev, node.next = node, head
+		node.prev, lru.head.next = lru.head, node
 
 		return node.val
 	}
 	return -1
 }
 
-func (this *LRUCache) Put(key int, value int) {
-	if node, ok := this.m[key]; ok {
-		node.val = value
-		node.next.prev, node.prev.next = node.prev, node.next
 
-		tmp := this.head.next
+func (lru *LRUCache) Put(key int, val int) {
+	if node, ok := lru.m[key]; ok {
+		node.val = val
 
-		tmp.prev = node
-		node.next = tmp
+		node.prev.next, node.next.prev = node.next, node.prev
 
-		this.head.next = node
-		node.prev = this.head
-
-		return
-	}
-	node := &Node{key: key, val: value}
-	realHead := this.head.next
-	realHead.prev = node
-	node.next = realHead
-
-	this.head.next = node
-	node.prev = this.head
-
-	this.m[key] = node
-
-	if this.length < this.cap {
-		this.length += 1
+		head := lru.head.next
+		head.prev, node.next = node, head
+		node.prev, lru.head.next = lru.head, node
 		return
 	}
 
-	realTail := this.tail.prev
+	node := &Node{key: key, val: val}
+	// add to link head
+	head := lru.head.next
+	head.prev, node.next = node, head
+	node.prev, lru.head.next = lru.head, node
 
-	realTail.next.prev, realTail.prev.next = realTail.prev, realTail.next
+	// add to m
+	lru.m[key] = node
 
-	realTail.next = nil
-	realTail.prev = nil
-	delete(this.m, realTail.key)
-	return
+
+	if lru.length < lru.cap {
+		lru.length += 1
+		return
+	}
+
+	// delete tail
+	tail := lru.tail.prev
+	tail.next.prev, tail.prev.next = tail.prev, tail.next
+
+	tail.prev = nil
+	tail.next = nil
+
+	delete(lru.m, tail.key)
 
 }
 

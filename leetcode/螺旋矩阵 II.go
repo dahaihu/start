@@ -1,40 +1,40 @@
 package leetcode
 
 func generateMatrix(n int) [][]int {
-	res := make([][]int, n)
+	matrix := make([][]int, n)
 	for i := 0; i < n; i++ {
-		res[i] = make([]int, n)
+		matrix[i] = make([]int, n)
 	}
-	fillData(0, 0, n, n, 1, res)
-	return res
+	fillData(0, 0, n, 1, matrix)
+	return matrix
 }
 
-func fillData(x, y, lengthX, lengthY, cur int, arr [][]int) {
-	// 矩形上边
-	for i := y; i <= y+lengthY-1; i++ {
-		arr[x][i] = cur
+func fillData(x, y, length, cur int, matrix [][]int) {
+	for i := y; i < y+length; i++ {
+		matrix[x][i] = cur
 		cur += 1
 	}
-	if lengthX == 1 {
+	if length == 1 {
 		return
 	}
-	// 矩形右边
-	for i := x + 1; i < x+lengthX-1; i++ {
-		arr[i][y+lengthY-1] = cur
+	for i := x + 1; i < x+length-1; i++ {
+		matrix[i][y+length-1] = cur
 		cur += 1
 	}
-	// 矩形下边
-	for i := y + lengthY - 1; i >= y; i-- {
-		arr[x+lengthX-1][i] = cur
+
+	for i := y + length - 1; i >= y; i-- {
+		matrix[x+length-1][i] = cur
 		cur += 1
 	}
-	if lengthY == 2 {
+
+	if length == 2 {
 		return
 	}
-	// 矩阵左边
-	for i := x + lengthX - 2; i >= x+1; i-- {
-		arr[i][y] = cur
+
+	for i := x + length - 2; i > x; i-- {
+		matrix[i][y] = cur
 		cur += 1
 	}
-	fillData(x+1, y+1, lengthX-2, lengthY-2, cur, arr)
+
+	fillData(x+1, y+1, length-2, cur, matrix)
 }
