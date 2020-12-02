@@ -7,8 +7,6 @@ type Node struct {
 	prev, next *Node
 }
 type LRUCache struct {
-	// root.prev is head
-	// root.next is tail
 	head, tail        *Node
 	m           map[int]*Node
 	length, cap int
