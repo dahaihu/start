@@ -6,18 +6,6 @@ import (
 )
 
 func TestLRUCache_Get(t *testing.T) {
-	node := Node{}
-	node.changeVal(100)
-	fmt.Println("changed",  node.val)
-	node.cchangeVal(200)
-	fmt.Println("changed",  node.val)
-
-	(&node).changeVal(300)
-	fmt.Println("changed",  node.val)
-
-	(&node).cchangeVal(400)
-	fmt.Println("changed",  node.val)
-
 	lru := Constructor(2)
 	lru.Put(1, 1)
 	fmt.Println(lru.length, len(lru.m))
