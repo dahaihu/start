@@ -7,18 +7,8 @@ type Node struct {
 	prev, next *Node
 }
 
-func (node Node) changeVal(val int) {
-	node.val = val
-	fmt.Println(node.key, node.val)
-}
-
-func (node *Node) cchangeVal(val int) {
-	node.val = val
-	fmt.Println(node.key, node.val)
-}
-
 type LRUCache struct {
-	head, tail  *Node
+	head, tail        *Node
 	m           map[int]*Node
 	length, cap int
 }
