@@ -1,0 +1,18 @@
+cache:
+  enable: false
+  list: [redis,mongoDB]
+mysql:
+  user: root
+  password: Tech2501
+  host: 10.11.22.33
+  port: 3306
+  name: cwi
+persons:
+  - name: zhangsan
+    age: 10
+    names:
+      - zhangsan
+      - lisi
+  - name: lisi
+    age: 100
+    names: ["wangwu", "lisi"]
