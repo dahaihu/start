@@ -15,4 +15,11 @@ persons:
       - lisi
   - name: lisi
     age: 100
-    names: ["wangwu", "lisi"]
+    names:
+      - wangwu
+      - lisi
+  - name: wangwu
+    age: 1000
+    names:
+      - zhang
+      - wang
