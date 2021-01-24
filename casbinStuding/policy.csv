@@ -1,5 +1,2 @@
-p, admin, /*, *
-p, anonymous, /login, *
-p, member, /logout, *
-p, member, /member/*, *
-g, hushichang, admin
+p, alice, data1, read
+p, bob, data2, write

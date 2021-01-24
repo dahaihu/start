@@ -2,4 +2,4 @@ p, admin, zhihu, /*, *
 p, anonymous, zhihu, /login, *
 p, member, zhihu, /logout, *
 p, member, zhihu, /member/*, *
-g, hushichang, admin, zhihu
+g, test, admin, zhihu

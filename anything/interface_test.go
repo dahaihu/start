@@ -1,12 +1,13 @@
 package anything
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestInterface(t *testing.T) {
-	r := rect{3, 4}
-	c := circle{10}
-	s := &square{100}
-	measure(r)
-	measure(c)
-	measure(s)
+	var r geometry = rect{3, 4}
+	var c geometry = circle{10}
+	fmt.Println("r == c : ", r == c)
+	fmt.Println(1e6 == 1000000)
 }

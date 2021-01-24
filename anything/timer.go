@@ -17,7 +17,7 @@ import (
 
 func TimerTest() {
 	timer1 := time.NewTimer(time.Second)
-	<-timer1.C
+	fmt.Println(<-timer1.C)
 	fmt.Println("timer1 fired")
 
 	timer2 := time.NewTimer(time.Millisecond)
