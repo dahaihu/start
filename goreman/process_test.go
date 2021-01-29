@@ -6,9 +6,10 @@ import (
 	"sync"
 	"syscall"
 	"testing"
+	"time"
 )
-type logger struct {}
 
+type logger struct{}
 
 func (l logger) Write(p []byte) (n int, err error) {
 	fmt.Println(string(p))
@@ -26,7 +27,7 @@ func TestProcess(t *testing.T) {
 	}
 	var wg sync.WaitGroup
 	wg.Add(1)
-	go func(){
+	go func() {
 		defer wg.Done()
 		if err := cmd.Wait(); err != nil {
 			fmt.Printf("wait err is %v\n", err)
@@ -37,4 +38,15 @@ func TestProcess(t *testing.T) {
 		fmt.Printf("signal err is %v\n", err)
 	}
 	wg.Wait()
+}
+
+func TestKillProcess(t *testing.T) {
+	cmd := exec.Command("/bin/sh", "-c", "sleep 100")
+	cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
+	start := time.Now()
+	time.AfterFunc(10*time.Second, func() {
+		_ = syscall.Kill(-cmd.Process.Pid, syscall.SIGKILL)
+	})
+	err := cmd.Run()
+	fmt.Printf("pid=%d duration=%s err=%s\n", cmd.Process.Pid, time.Since(start), err)
 }
