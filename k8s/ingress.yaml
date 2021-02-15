@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"nginx.ingress.kubernetes.io/rewrite-target":"/"},"name":"myapp-ingress","namespace":"default"},"spec":{"rules":[{"http":{"paths":[{"backend":{"service":{"name":"myapp","port":{"number":80}}},"path":"/path","pathType":"Prefix"}]}}]}}
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  creationTimestamp: "2021-02-12T12:57:55Z"
+  generation: 1
+  name: myapp-ingress
+  namespace: default
+  resourceVersion: "2741296"
+  selfLink: /apis/extensions/v1beta1/namespaces/default/ingresses/myapp-ingress
+  uid: 70266aa5-751e-4948-ad9d-1b682333d812
+spec:
+  rules:
+    - http:
+        paths:
+          - backend:
+              serviceName: myapp
+              servicePort: 80
+            path: /path
+            pathType: Prefix
+status:
+  loadBalancer:
+    ingress:
+      - hostname: localhost
