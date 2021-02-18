@@ -24,9 +24,9 @@ package leetcode
 //著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
 func exist(board [][]byte, word string) bool {
-	for i := 0; i < len(board); i++ {
-		for j := 0; j < len(board[0]); j++ {
-			if checkExist(board, i, j, 0, word) {
+	for x := 0; x < len(board); x++ {
+		for y := 0; y < len(board[0]); y++ {
+			if checkExist(board, x, y, 0, word) {
 				return true
 			}
 		}
@@ -35,25 +35,21 @@ func exist(board [][]byte, word string) bool {
 }
 
 func checkExist(board [][]byte, x, y, idx int, word string) bool {
-	if x < 0 || x >= len(board) || y < 0 || y >= len(board[0]) {
+	if x < 0 || x > len(board) ||
+		y < 0 || y > len(board[0]) ||
+		word[idx] != board[x][y] {
 		return false
 	}
-
-	if board[x][y] != word[idx] {
-		return false
-	}
-
-	if idx == len(word)-1 {
+	idx += 1
+	if len(word) == idx {
 		return true
 	}
-
 	tmp := board[x][y]
 	board[x][y] = '.'
-	res := checkExist(board, x-1, y, idx+1, word)
-	res = res || checkExist(board, x+1, y, idx+1, word)
-	res = res || checkExist(board, x, y+1, idx+1, word)
-	res = res || checkExist(board, x, y-1, idx+1, word)
-
+	res := checkExist(board, x+1, y, idx, word)
+	res = res || checkExist(board, x-1, y, idx, word)
+	res = res || checkExist(board, x, y+1, idx, word)
+	res = res || checkExist(board, x, y-1, idx, word)
 	board[x][y] = tmp
 	return res
 }
