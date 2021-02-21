@@ -1,13 +1,13 @@
 class Solution:
     def numIslands(self, grid):
         def dfs(grid, x, y):
-            if not (0 <= x < len(grid) and 0 <= y < len(grid[0])):
+            if x < 0 or x >= len(grid) \
+                    or y < 0 or y >= len(grid[0]) \
+                    or grid[x][y] == '0':
                 return
-            if grid[x][y] != '1':
-                return
-            grid[x][y] = 0
-            dfs(grid, x + 1, y)
+            grid[x][y] = '0'
             dfs(grid, x - 1, y)
+            dfs(grid, x + 1, y)
             dfs(grid, x, y + 1)
             dfs(grid, x, y - 1)
 
@@ -16,7 +16,7 @@ class Solution:
             for y in range(len(grid[0])):
                 if grid[x][y] == '1':
                     nums += 1
-                    dfs(grid, x, y)
+                dfs(grid, x, y)
         return nums
 
 
