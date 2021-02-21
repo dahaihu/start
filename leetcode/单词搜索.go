@@ -35,21 +35,21 @@ func exist(board [][]byte, word string) bool {
 }
 
 func checkExist(board [][]byte, x, y, idx int, word string) bool {
-	if x < 0 || x > len(board) ||
-		y < 0 || y > len(board[0]) ||
-		word[idx] != board[x][y] {
+	if x < 0 || x >= len(board) ||
+		y < 0 || y >= len(board[0]) ||
+			board[x][y] != word[idx] {
 		return false
 	}
 	idx += 1
-	if len(word) == idx {
+	if idx == len(word) {
 		return true
 	}
 	tmp := board[x][y]
 	board[x][y] = '.'
-	res := checkExist(board, x+1, y, idx, word)
-	res = res || checkExist(board, x-1, y, idx, word)
-	res = res || checkExist(board, x, y+1, idx, word)
+	res := checkExist(board, x, y+1, idx, word)
 	res = res || checkExist(board, x, y-1, idx, word)
+	res = res || checkExist(board, x+1, y, idx, word)
+	res = res || checkExist(board, x-1, y, idx, word)
 	board[x][y] = tmp
 	return res
 }
