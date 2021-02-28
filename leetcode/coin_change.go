@@ -18,14 +18,14 @@ func coinChange(coins []int, amount int) int {
 			if curAmount < coin {
 				break
 			}
-			if mark[curAmount-coin] < min && (curAmount == coin || mark[curAmount-coin] != 0) {
+			if (curAmount == coin || mark[curAmount-coin] > 0) && mark[curAmount-coin] < min {
 				min = mark[curAmount-coin]
 			}
 		}
 		if min == math.MaxInt64 {
 			continue
 		}
-		mark[curAmount] = min+1
+		mark[curAmount] = min + 1
 	}
 	if mark[amount] == 0 {
 		return -1
