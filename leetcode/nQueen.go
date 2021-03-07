@@ -1,32 +1,34 @@
 package leetcode
 
 func solveNQueens(n int) [][]int {
-	mark := make([][]int, 0)
-	var solveQueensIdx func([]int, int)
-	solveQueensIdx = func(tmpRes []int, idx int) {
-		//fmt.Println("tmpRes is ", tmpRes, "idx is ", idx)
+	res := [][]int{}
+	var dfs func([]int, int)
+	dfs = func(internalRes []int, idx int) {
 		if idx == n {
-			mark = append(mark, tmpRes)
+			res = append(res, internalRes)
 			return
 		}
-		for i := 0; i < n; i++ {
-			success := true
-			for prev, num := range tmpRes {
-				if i == num || idx - prev == abs(i-num) {
-					success = false
-					break
-				}
+		for val := 0; val < n; val++ {
+			if conflicts(internalRes, idx, val) {
+				continue
 			}
-			if success {
-				tmp := make([]int, len(tmpRes) + 1)
-				copy(tmp[:len(tmpRes)], tmpRes)
-				tmp[len(tmpRes)] = i
-				solveQueensIdx(tmp, idx+1)
-			}
+			tmp := make([]int, len(internalRes)+1)
+			copy(tmp, internalRes)
+			tmp[len(internalRes)] = val
+			dfs(tmp, idx+1)
 		}
 	}
-	solveQueensIdx([]int{}, 0)
-	return mark
+	dfs([]int{}, 0)
+	return res
+}
+
+func conflicts(prev []int, idx, val int) bool {
+	for prevIdx, prevVal := range prev {
+		if val == prevVal || (idx-prevIdx) == abs(prevVal - val) {
+			return true
+		}
+	}
+	return false
 }
 
 func abs(val int) int {
