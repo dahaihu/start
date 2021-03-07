@@ -68,31 +68,27 @@ func coinChangeFromTop(coins []int, amount int) int {
 }
 
 func coinChangeUsingDfs(coins []int, amount int) int {
-	sort.Slice(coins, func(i, j int) bool { return coins[i] >= coins[j] })
-	var dfs func([]int, int, int, *int)
-	res := math.MaxInt64
-	dfs = func(coins []int, count int, amount int, res *int) {
+	sort.Slice(coins, func(i, j int) bool {return coins[i]>=coins[j]})
+	coinCnt := math.MaxInt64
+	var dep func([]int, int, int, *int)
+	dep = func(coins []int, count int, amount int, coinCnt *int) {
 		if amount == 0 {
-			if count < *res {
-				*res = count
+			if count < *coinCnt {
+				*coinCnt = count
 			}
 			return
 		}
 		if len(coins) == 0 {
 			return
 		}
-		coinCnt := amount / coins[0]
-		if coinCnt+count >= *res {
-			return
+		for cnt := amount/coins[0]; cnt >= 0 && cnt + count < *coinCnt; cnt-- {
+			dep(coins[1:], count + cnt, amount - cnt*coins[0], coinCnt)
 		}
-		for ; coinCnt >= 0; coinCnt-- {
-			dfs(coins[1:], coinCnt+count, amount-coinCnt*coins[0], res)
-		}
-	}
 
-	dfs(coins, 0, amount, &res)
-	if res == math.MaxInt64 {
+	}
+	dep(coins, 0, amount, &coinCnt)
+	if coinCnt == math.MaxInt64 {
 		return -1
 	}
-	return res
+	return coinCnt
 }
