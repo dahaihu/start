@@ -144,3 +144,83 @@ curl -X GET -d '{
   }
 }' -H 'Content-Type: application/json' 'http://localhost:9200/group/_doc/_search'
 
+
+
+# 父子关系索引的建立
+curl -X PUT -d '{
+  "mappings": {
+    "properties": {
+      "relation_type": {
+        "type": "join",
+        "eager_global_ordinals": true,
+        "relations": {
+          "project": "training",
+          "training": "resource"
+        }
+      }
+    }
+  }
+}' -H 'Content-Type: application/json' 'http://localhost:9200/project'
+
+
+curl -X POST -d '
+{
+    "name":"resource4",
+    "type": "resourceType4",
+    "relation_type":{
+        "name":"resource",
+        "parent": "gS4pYncBzPzGau25rjx0"
+    }
+}
+' -H 'Content-Type: application/json' 'http://localhost:9200/project/_doc?routing=fy4oYncBzPzGau25FjyU'
+
+
+# 根据父节点，查询所有的子节点
+curl -X GET -H 'Content-Type: application/json' -d '
+{
+  "query": {
+    "parent_id": {
+      "type": "training",
+      "id": "fy4oYncBzPzGau25FjyU"
+    }
+  }
+}
+' 'http://localhost:9200/project/_doc/_search?pretty=true'
+
+
+# 查询 title 包含 first 的父文档的所有子文档
+curl -X GET -H 'Content-Type: application/json' -d '
+{
+  "query": {
+    "has_parent": {
+      "parent_type": "project",
+      "query": {
+        "match": {
+          "name": "name"
+        }
+      }
+    }
+  }
+}
+' 'http://localhost:9200/project/_doc/_search?pretty=true'
+
+
+curl -X GET -H 'Content-Type: application/json' -d '
+{
+  "query": {
+    "has_parent": {
+      "parent_type": "training",
+      "query": {
+        "has_parent": {
+          "parent_type": "project",
+          "query": {
+            "match": {
+              "name": "name"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+' 'http://localhost:9200/project/_doc/_search?pretty=true'
