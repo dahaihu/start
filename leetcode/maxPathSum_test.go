@@ -18,6 +18,6 @@ func TestMaxPathSum(t *testing.T) {
 
 
 func TestString(t *testing.T) {
-	fmt.Println(strings.Split("1,2,3", ","))
-	fmt.Println(strings.Join([]string{"1", "2", "3"}, ","))
+	items := strings.Split("1,2,3", "")
+	fmt.Println(len(items) == 5)
 }

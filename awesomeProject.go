@@ -1,18 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/google/uuid"
+)
 
-func safeRun(f func()) {
-	defer func() {
-		if err := recover(); err != nil {
-			fmt.Println("err is ", err)
-		}
-	}()
-	f()
-}
 func main() {
-	safeRun(func() {
-		panic("wo ri ni da ye ")
-	})
-	fmt.Println("safe end")
+	s := uuid.New().String()
+	fmt.Printf("share code is: %s\n", s)
+	// 表格定义的时候，去掉字符集的部分
 }

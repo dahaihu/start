@@ -27,11 +27,11 @@ func adjust(idx int, margin int, array []int) {
 
 }
 
-func HeapSort(array []int) {
+func heapSort(array []int) {
 	for i := len(array)/2 - 1; i >= 0; i-- {
 		adjust(i, len(array), array)
 	}
-	for i := len(array) - 1; i >= 0; i-- {
+	for i := len(array) - 1; i > 0; i-- {
 		array[0], array[i] = array[i], array[0]
 		adjust(0, i, array)
 	}
