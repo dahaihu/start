@@ -6,9 +6,9 @@ import (
 )
 
 func insertSort(arr []int) {
-	for start, end := 1, len(arr); start < end; start++ {
-		for i := start; i > 0 && arr[i] < arr[i-1]; i-- {
-			arr[i], arr[i-1] = arr[i-1], arr[i]
+	for dummy := 1; dummy < len(arr); dummy++ {
+		for mark := dummy-1; mark >= 0 && arr[mark] > arr[mark+1]; mark-- {
+			arr[mark], arr[mark+1] = arr[mark+1], arr[mark]
 		}
 	}
 }
