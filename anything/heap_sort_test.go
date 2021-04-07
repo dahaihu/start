@@ -36,6 +36,7 @@ func randomSequence(min, max int) []int {
 
 
 func TestSequence(t *testing.T) {
+	//DeferExp()
 	mark := randomSequence(1, 10)
 	fmt.Println("original mark is ", mark)
 	heapSort(mark)

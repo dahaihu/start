@@ -49,4 +49,6 @@ func factory() {
 	p1.create()
 	p2 := f.Generate("product2")
 	p2.create()
+	p3 := f.Generate("product3")
+	p3.create()
 }

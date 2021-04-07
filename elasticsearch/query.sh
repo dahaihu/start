@@ -197,12 +197,25 @@ curl -X GET -H 'Content-Type: application/json' -d '
       "query": {
         "match": {
           "name": "name"
+=======
+# parent child
+
+curl -X PUT -H 'Content-Type: application/json' '
+{
+  "mappings": {
+    "properties": {
+      "my_id": {
+        "type": "keyword"
+      },
+      "my_join_field": {
+        "type": "join",
+        "relations": {
+          "question": "answer"
         }
       }
     }
   }
 }
-' 'http://localhost:9200/project/_doc/_search?pretty=true'
 
 
 curl -X GET -H 'Content-Type: application/json' -d '
@@ -223,4 +236,13 @@ curl -X GET -H 'Content-Type: application/json' -d '
     }
   }
 }
-' 'http://localhost:9200/project/_doc/_search?pretty=true'
+}' 'http://localhost:9200/my-index-000001'
+
+
+curl -X PUT -H 'Content-Type: application/json' '
+{
+  "my_id": "1",
+  "text": "This is a question",
+  "my_join_field": {
+    "name": "question"
+  }

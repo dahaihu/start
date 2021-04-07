@@ -2,6 +2,7 @@ package anything
 
 import (
 	"fmt"
+	"sync"
 	"time"
 )
 
@@ -12,33 +13,37 @@ import (
  */
 
 // oneWorker 既然相当于工人， 那么他需要什么呢？输入，输出，以及确认它是哪一个工人
-func oneWorker(id int, jobs <-chan int, results chan<- int) {
-	for  {
+func oneWorker(id int, jobs <-chan int, wg *sync.WaitGroup) {
+	defer wg.Done()
+	for {
 		job, ok := <- jobs
 		if !ok {
-			break
+			return
 		}
-		fmt.Printf("worker %d start job %d\n", id, job)
-		time.Sleep(time.Second)
-		fmt.Printf("worker %d end job %d\n", id, job)
-		results <- 2 * job
+		fmt.Printf("worker %d start doing job %d\n", id, job)
+		time.Sleep(time.Microsecond * 100)
+		fmt.Printf("worker %d has done the  job %d\n", id, job)
 	}
 }
 
 func WorkerPoolExp() {
-	const numJobs = 5
-	jobs := make(chan int, numJobs)
-	results := make(chan int, numJobs)
-	for i := 1; i <= 3; i++ {
-		go oneWorker(i, jobs, results)
+	const numJobs = 100
+	const workers = 3
+	jobs := make(chan int, 3)
+	wg := &sync.WaitGroup{}
+	wg.Add(1)
+	go func () {
+		defer wg.Done()
+		for i := 0; i < numJobs; i++ {
+			fmt.Printf("sending job %d\n", i)
+			jobs <- i
+		}
+		close(jobs)
+	}()
+	for i := 0; i < workers; i++ {
+		wg.Add(1)
+		go oneWorker(i, jobs, wg)
 	}
-
-	for i := 1; i<= 5; i++ {
-		jobs <- i
-	}
-	close(jobs)
-
-	for i := 1; i<= 5; i++ {
-		<-results
-	}
+	wg.Wait()
+	fmt.Println("wait done ?????")
 }

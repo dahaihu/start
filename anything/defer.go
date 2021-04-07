@@ -12,13 +12,13 @@ type Car struct {
 	model string
 }
 
-func (c *Car) PrintModel() {
+func (c Car) PrintModel() {
 	fmt.Println(c.model)
 }
 
 
 func DeferExp() {
-	c := Car{"bm"}
+	c := &Car{"bm"}
 	defer c.PrintModel()
 	c.model = "bc"
 }

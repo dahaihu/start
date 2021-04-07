@@ -6,13 +6,13 @@ import (
 	"os/signal"
 	"sync"
 	"testing"
+	"time"
 )
 
 func listen(name string, a map[string]int, c *sync.Cond) {
+	time.Sleep(time.Microsecond * 100)
 	c.L.Lock()
-	for len(a) == 0 {
-		c.Wait()
-	}
+	c.Wait()
 	fmt.Printf("%s age: %d\n", name, a["T"])
 	c.L.Unlock()
 }
@@ -30,6 +30,7 @@ func TestCond(t *testing.T) {
 	m := sync.Mutex{}
 	cond := sync.NewCond(&m)
 
+	// 如果先 wait 呢？？？
 	// listener 1
 	go listen("lis1", age, cond)
 
@@ -37,6 +38,7 @@ func TestCond(t *testing.T) {
 	go listen("lis2", age, cond)
 
 	// broadcast
+	// 如果先 broadcast 呢？？？？
 	go broadcast("b1", age, cond)
 
 	ch := make(chan os.Signal, 1)
