@@ -20,13 +20,12 @@ class Solution:
             self.nums -= 1
 
     def findCircleNum(self, isConnected):
-        for i in range(len(isConnected)):
-            for j in range(len(isConnected[0])):
-                if isConnected[i][j] == 0:
-                    continue
-                self.union(i, j)
+        for x in range(len(isConnected)):
+            for y in range(len(isConnected[0])):
+                if isConnected[x][y] == 1:
+                    self.union(x, y)
         return self.nums
 
 
 if __name__ == '__main__':
-    print(Solution().findCircleNum([[1, 0, 1], [0, 1, 1], [1, 1, 1]]))
+    print(Solution().findCircleNum([[1, 0, 0], [0, 1, 0], [0, 0, 1]]))
