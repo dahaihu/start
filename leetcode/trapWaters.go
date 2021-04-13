@@ -15,24 +15,23 @@ func trap(height []int) int {
 	mark := make([]Height, 0)
 	for idx, h := range height {
 		preHeight := 0
-		for len(mark) != 0 {
-			tmpHeight := mark[len(mark)-1]
-			if tmpHeight.height > h {
-				waters += (h - preHeight) * (idx - tmpHeight.index - 1)
-				mark = append(mark, Height{idx, h})
-				break
-			} else if tmpHeight.height < h {
-				waters += (tmpHeight.height - preHeight) * (idx - tmpHeight.index - 1)
-				preHeight = tmpHeight.height
-				mark = mark[:len(mark)-1]
-			} else {
-				waters += (tmpHeight.height - preHeight) * (idx - tmpHeight.index - 1)
-				mark[len(mark)-1].index = idx
-				break
-			}
+		for len(mark) != 0 && mark[len(mark)-1].height < h {
+			lastItem := mark[len(mark)-1]
+			waters += (idx - lastItem.index - 1) * (lastItem.height - preHeight)
+			preHeight = lastItem.height
+			mark = mark[:len(mark)-1]
 		}
 		if len(mark) == 0 {
-			mark = append(mark, Height{idx, h})
+			mark = append(mark, Height{index: idx, height: h})
+			continue
+		}
+		lastItem := mark[len(mark)-1]
+		if lastItem.height == h {
+			waters += (idx - lastItem.index - 1) * (lastItem.height - preHeight)
+			mark[len(mark)-1].index = idx
+		} else {
+			waters += (idx - lastItem.index - 1) * (h - preHeight)
+			mark = append(mark, Height{index: idx, height: h})
 		}
 	}
 	return waters
@@ -47,7 +46,7 @@ func getPermutation(n int, k int) string {
 
 	items := make([]string, n, n)
 	for i := 0; i < n; i++ {
-		items[i] = strconv.Itoa(i+1)
+		items[i] = strconv.Itoa(i + 1)
 	}
 
 	res := make([]string, 0, n)
@@ -57,7 +56,7 @@ func getPermutation(n int, k int) string {
 		if k == 0 {
 			res = append(res, items[idx-1])
 			items = popKItem(idx-1, items)
-			for i := len(items)-1; i >= 0; i-- {
+			for i := len(items) - 1; i >= 0; i-- {
 				res = append(res, items[i])
 			}
 			break
