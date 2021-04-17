@@ -20,18 +20,21 @@ func Constructor(capacity int) LRUCache {
 	return LRUCache{head: head, tail: tail, length: 0, cap: capacity, m: make(map[int]*Node)}
 }
 
+func (lru *LRUCache) adjustPlace(node *Node) {
+	node.prev.next, node.next.prev = node.next, node.prev
+
+	head := lru.head.next
+	head.prev, node.next = node, head
+	node.prev, lru.head.next = lru.head, node
+}
+
 func (lru *LRUCache) Get(key int) int {
 	if node, ok := lru.m[key]; ok {
 		// head
 		if node == lru.head.next {
 			return node.val
 		}
-		node.prev.next, node.next.prev = node.next, node.prev
-
-		head := lru.head.next
-		head.prev, node.next = node, head
-		node.prev, lru.head.next = lru.head, node
-
+		lru.adjustPlace(node)
 		return node.val
 	}
 	return -1
@@ -41,12 +44,7 @@ func (lru *LRUCache) Get(key int) int {
 func (lru *LRUCache) Put(key int, val int) {
 	if node, ok := lru.m[key]; ok {
 		node.val = val
-
-		node.prev.next, node.next.prev = node.next, node.prev
-
-		head := lru.head.next
-		head.prev, node.next = node, head
-		node.prev, lru.head.next = lru.head, node
+		lru.adjustPlace(node)
 		return
 	}
 
