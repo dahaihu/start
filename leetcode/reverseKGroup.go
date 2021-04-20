@@ -2,27 +2,27 @@ package leetcode
 
 // very interesting
 func reverseKGroup(head *ListNode, k int) *ListNode {
-	var left, node, dummy, sentinel *ListNode
-	sentinel = &ListNode{}
-	dummy = sentinel
-	for head != nil {
-		node = head
+	dummy := &ListNode{}
+	sentinel := dummy
+	for {
+		tmp := head
 		for i := 0; i < k; i++ {
-			if node == nil {
+			if tmp == nil {
 				sentinel.Next = head
 				return dummy.Next
 			}
-			node = node.Next
+			tmp = tmp.Next
 		}
-		left, node = head, nil
-		for i := 0; i < k; i++ {
-			next := head.Next
-			head.Next = node
-			node = head
-			head = next
+		pre, cur := head, head.Next
+		pre.Next = nil
+		for i := 1; i < k; i++ {
+			tmp = cur.Next
+			cur.Next = pre
+
+			pre, cur = cur, tmp
 		}
-		sentinel.Next = node
-		sentinel = left
+		sentinel.Next = pre
+		sentinel = head
+		head = cur
 	}
-	return dummy.Next
 }
