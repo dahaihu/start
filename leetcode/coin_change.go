@@ -5,26 +5,31 @@ import (
 	"sort"
 )
 
+const Unreachable = math.MaxInt64
+
 // how to initiate
 func coinChange(coins []int, amount int) int {
+	sort.Slice(coins, func(i, j int) bool {return coins[i] <= coins[j]})
 	mark := make([]int, amount+1)
 	for i := 1; i <= amount; i++ {
-		mark[i] = -1
+		mark[i] = Unreachable
 	}
-	sort.Slice(coins, func(i, j int) bool { return coins[i] <= coins[j] })
-	for curAmount := coins[0]; curAmount <= amount; curAmount++ {
-		prevMinUsedCnt := math.MaxInt64
+	for i := coins[0]; i <= amount; i++ {
+		count := Unreachable
 		for _, coin := range coins {
-			if coin > curAmount {
+			if i < coin {
 				break
 			}
-			if tmp := mark[curAmount-coin]; tmp >= 0 && tmp < prevMinUsedCnt {
-				prevMinUsedCnt = tmp
+			if tmp := mark[i-coin]; tmp < count {
+				count = tmp
 			}
 		}
-		if prevMinUsedCnt != math.MaxInt64 {
-			mark[curAmount] = prevMinUsedCnt + 1
+		if count != Unreachable {
+			mark[i] = count + 1
 		}
+	}
+	if mark[amount] == Unreachable {
+		return -1
 	}
 	return mark[amount]
 }
