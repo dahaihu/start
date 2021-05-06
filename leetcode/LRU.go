@@ -8,7 +8,7 @@ type Node struct {
 }
 
 type LRUCache struct {
-	head, tail        *Node
+	head, tail  *Node
 	m           map[int]*Node
 	length, cap int
 }
@@ -20,7 +20,7 @@ func Constructor(capacity int) LRUCache {
 	return LRUCache{head: head, tail: tail, length: 0, cap: capacity, m: make(map[int]*Node)}
 }
 
-func (lru *LRUCache) adjustPlace(node *Node) {
+func (lru *LRUCache) moveToHead(node *Node) {
 	node.prev.next, node.next.prev = node.next, node.prev
 
 	head := lru.head.next
@@ -34,17 +34,16 @@ func (lru *LRUCache) Get(key int) int {
 		if node == lru.head.next {
 			return node.val
 		}
-		lru.adjustPlace(node)
+		lru.moveToHead(node)
 		return node.val
 	}
 	return -1
 }
 
-
 func (lru *LRUCache) Put(key int, val int) {
 	if node, ok := lru.m[key]; ok {
 		node.val = val
-		lru.adjustPlace(node)
+		lru.moveToHead(node)
 		return
 	}
 
@@ -56,7 +55,6 @@ func (lru *LRUCache) Put(key int, val int) {
 
 	// add to m
 	lru.m[key] = node
-
 
 	if lru.length < lru.cap {
 		lru.length += 1
