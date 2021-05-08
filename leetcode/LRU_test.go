@@ -12,6 +12,8 @@ func TestLRUCache_Get(t *testing.T) {
 
 	lru.Put(2, 2)
 
+	lru.Put(1, 2)
+	lru.Put(3, 3)
 	fmt.Println(lru.m)
-
+	lru.print()
 }

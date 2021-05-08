@@ -2,74 +2,82 @@ package leetcode
 
 import "fmt"
 
-type Node struct {
+type lruNode struct {
+	prev, next *lruNode
 	key, val   int
-	prev, next *Node
 }
 
 type LRUCache struct {
-	head, tail  *Node
-	m           map[int]*Node
-	length, cap int
+	m                    map[int]*lruNode
+	length, cap          int
+	dummyHead, dummyTail *lruNode
 }
 
 func Constructor(capacity int) LRUCache {
-	head, tail := &Node{}, &Node{}
-	head.next = tail
-	tail.prev = head
-	return LRUCache{head: head, tail: tail, length: 0, cap: capacity, m: make(map[int]*Node)}
+	head, tail := &lruNode{}, &lruNode{}
+	head.next, tail.prev = tail, head
+	return LRUCache{
+		m:         make(map[int]*lruNode),
+		length:    0,
+		cap:       capacity,
+		dummyHead: head,
+		dummyTail: tail,
+	}
 }
-
-func (lru *LRUCache) moveToHead(node *Node) {
+func (this *LRUCache) moveToHead(node *lruNode) {
+	if node == this.dummyHead.next {
+		return
+	}
+	// ! node < !
 	node.prev.next, node.next.prev = node.next, node.prev
 
-	head := lru.head.next
-	head.prev, node.next = node, head
-	node.prev, lru.head.next = lru.head, node
+	head := this.dummyHead.next
+	// dummyHead -> node-> head
+	this.dummyHead.next, node.next = node, head
+	// dummyHead <- node <- head
+	head.prev, node.prev = node, this.dummyHead
 }
 
-func (lru *LRUCache) Get(key int) int {
-	if node, ok := lru.m[key]; ok {
-		// head
-		if node == lru.head.next {
-			return node.val
-		}
-		lru.moveToHead(node)
+func (this *LRUCache) Get(key int) int {
+	if node, ok := this.m[key]; ok {
+		this.moveToHead(node)
 		return node.val
 	}
 	return -1
 }
 
-func (lru *LRUCache) Put(key int, val int) {
-	if node, ok := lru.m[key]; ok {
-		node.val = val
-		lru.moveToHead(node)
+func (this *LRUCache) Put(key int, value int) {
+	if node, ok := this.m[key]; ok {
+		this.moveToHead(node)
+		node.val = value
 		return
 	}
 
-	node := &Node{key: key, val: val}
-	// add to link head
-	head := lru.head.next
-	head.prev, node.next = node, head
-	node.prev, lru.head.next = lru.head, node
+	head := this.dummyHead.next
+	node := &lruNode{key: key, val: value}
+	// add data to map
+	this.m[key] = node
 
-	// add to m
-	lru.m[key] = node
+	// add data to linked list
+	// dummyHead -> node-> head
+	this.dummyHead.next, node.next = node, head
+	// dummyHead <- node <- head
+	head.prev, node.prev = node, this.dummyHead
 
-	if lru.length < lru.cap {
-		lru.length += 1
+	if this.length < this.cap {
+		this.length += 1
 		return
 	}
 
-	// delete tail
-	tail := lru.tail.prev
-	tail.next.prev, tail.prev.next = tail.prev, tail.next
+	// remove tail
+	tail := this.dummyTail.prev
+	// delete data from map
+	delete(this.m, tail.key)
+	// delete data from linked map
+	tail.prev.next, tail.next.prev = tail.next, tail.prev
 
 	tail.prev = nil
 	tail.next = nil
-
-	delete(lru.m, tail.key)
-
 }
 
 /**
@@ -79,9 +87,9 @@ func (lru *LRUCache) Put(key int, val int) {
  * obj.Put(key,value);
  */
 func (this *LRUCache) print() {
-	head := this.head.next
+	head := this.dummyHead.next
 	for {
-		if head.next == this.tail {
+		if head.next == this.dummyTail {
 			fmt.Printf("(%d, %d)", head.key, head.val)
 			break
 		}
