@@ -1,13 +1,14 @@
 package leetcode
+
 type Node struct {
-	parents      []*Node
-	val          int
-	visited      bool
-	childChecked bool
+	parents   []*Node
+	val       int
+	notCircle bool
+	visited   bool
 }
 
 func (node *Node) existCircle() bool {
-	if node.childChecked {
+	if node.notCircle {
 		return false
 	}
 	node.visited = true
@@ -20,33 +21,26 @@ func (node *Node) existCircle() bool {
 		}
 	}
 	node.visited = false
-	node.childChecked = true
+	node.notCircle = true
 	return false
 }
 
 func canFinish(numCourses int, prerequisites [][]int) bool {
-	allCourses := make(map[int]*Node, numCourses)
-	// 第一步，初始化树状图
+	nodes := make(map[int]*Node, numCourses)
+
 	for _, prerequisite := range prerequisites {
-		if prerequisite[0] == prerequisite[1] {
-			return false
-		}
-		// init node when needed
 		for _, course := range prerequisite {
-			if _, ok := allCourses[course]; !ok {
-				allCourses[course] = &Node{val: course}
+			if _, ok := nodes[course]; !ok {
+				nodes[course] = &Node{val: course}
 			}
 		}
-		node := allCourses[prerequisite[0]]
-		parent := allCourses[prerequisite[1]]
-		node.parents = append(node.parents, parent)
+		child, parent := nodes[prerequisite[0]], nodes[prerequisite[1]]
+		child.parents = append(child.parents, parent)
 	}
-	// 第二步，找环
-	for _, node := range allCourses {
-		if !node.childChecked && node.existCircle() {
+	for _, node := range nodes {
+		if !node.notCircle && node.existCircle() {
 			return false
 		}
 	}
 	return true
 }
-
