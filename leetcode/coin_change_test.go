@@ -6,8 +6,10 @@ import (
 )
 
 func Test_coinChange(t *testing.T) {
-	fmt.Println(coinChangeUsingDfs([]int{186, 419, 83, 408}, 6249))
-	//fmt.Println(coinChangeUsingDfs([]int{1, 3, 4}, 10))
+	//fmt.Println(coinChange([]int{186, 419, 83, 408}, 6249))
+	fmt.Println(coinChange([]int{1, 2, 5}, 10))
+	//fmt.Println(coinChange([]int{2}, 3))
+	//fmt.Println(coinChange([]int{1, 2, 5}, 10))
 }
 
 func Test_ArrayPointer(t *testing.T) {
@@ -23,5 +25,5 @@ func Test_ArrayPointer(t *testing.T) {
 }
 
 func Test_FromTopToBottom(t *testing.T) {
-	fmt.Println(coinChangeFromTop([]int{2}, 3))
+	fmt.Println(coinChange([]int{2}, 3))
 }

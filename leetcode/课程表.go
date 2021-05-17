@@ -1,7 +1,7 @@
 package leetcode
 
 type Node struct {
-	parents   []*Node
+	children  []*Node
 	val       int
 	notCircle bool
 	visited   bool
@@ -12,11 +12,11 @@ func (node *Node) existCircle() bool {
 		return false
 	}
 	node.visited = true
-	for _, parent := range node.parents {
-		if parent.visited {
+	for _, child := range node.children {
+		if child.visited {
 			return true
 		}
-		if parent.existCircle() {
+		if child.existCircle() {
 			return true
 		}
 	}
@@ -35,7 +35,7 @@ func canFinish(numCourses int, prerequisites [][]int) bool {
 			}
 		}
 		child, parent := nodes[prerequisite[0]], nodes[prerequisite[1]]
-		child.parents = append(child.parents, parent)
+		parent.children = append(parent.children, child)
 	}
 	for _, node := range nodes {
 		if !node.notCircle && node.existCircle() {
