@@ -8,7 +8,7 @@ type Client struct {
 
 type ClientSetting func(*Client)
 
-func ClientWithHoust(host string) ClientSetting {
+func ClientWithHost(host string) ClientSetting {
 	return func(c *Client) {
 		c.Host = host
 	}
@@ -23,6 +23,6 @@ func NewClient(ops ...ClientSetting) *Client {
 }
 
 func main() {
-	client := NewClient(ClientWithHoust("www.baidu.com"))
+	client := NewClient(ClientWithHost("www.baidu.com"))
 	fmt.Println("client is ", *client)
 }
