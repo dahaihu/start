@@ -2,27 +2,34 @@ package main
 
 import "fmt"
 
-type Client struct {
-	Host string
+type Person struct {
+	Name string
+	Age  int
 }
 
-type ClientSetting func(*Client)
+type PersonSetting func(*Person)
 
-func ClientWithHost(host string) ClientSetting {
-	return func(c *Client) {
-		c.Host = host
+func PersonWithName(name string) PersonSetting {
+	return func(p *Person) {
+		p.Name = name
 	}
 }
 
-func NewClient(ops ...ClientSetting) *Client {
-	client := &Client{}
+func PersonWithAge(age int) PersonSetting {
+	return func(p *Person) {
+		p.Age = age
+	}
+}
+
+func NewPerson(ops ...PersonSetting) *Person {
+	person := &Person{}
 	for _, op := range ops {
-		op(client)
+		op(person)
 	}
-	return client
+	return person
 }
 
 func main() {
-	client := NewClient(ClientWithHost("www.baidu.com"))
-	fmt.Println("client is ", *client)
+	person := NewPerson(PersonWithName("zhangsan"), PersonWithAge(10))
+	fmt.Println("client is ", *person)
 }
