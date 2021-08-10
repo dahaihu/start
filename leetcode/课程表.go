@@ -51,6 +51,7 @@ func canFinish(numCourses int, prerequisites [][]int) bool {
 
 func canFinishBFS(numCourses int, prerequisites [][]int) bool {
 	courseChildren := make(map[int][]int, numCourses)
+	// 这个地方为什么用切片，而不是字典，需要注意下
 	in := make([]int, numCourses)
 	for _, prerequisite := range prerequisites {
 		child, parent := prerequisite[0], prerequisite[1]
@@ -58,6 +59,7 @@ func canFinishBFS(numCourses int, prerequisites [][]int) bool {
 		courseChildren[parent] = append(courseChildren[parent], child)
 	}
 	var queue []int
+	// 切片的遍历，包括可能的并没有出现在 prerequisites 中的课程，所以in这个变量最好是切片
 	for course, inCount := range in {
 		if inCount == 0 {
 			queue = append(queue, course)
