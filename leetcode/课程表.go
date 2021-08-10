@@ -11,11 +11,11 @@ func (node *Node) existCircle() bool {
 	if node.notCircle {
 		return false
 	}
+	if node.visited {
+		return true
+	}
 	node.visited = true
 	for _, child := range node.children {
-		if child.visited {
-			return true
-		}
 		if child.existCircle() {
 			return true
 		}
@@ -27,24 +27,27 @@ func (node *Node) existCircle() bool {
 
 func canFinish(numCourses int, prerequisites [][]int) bool {
 	nodes := make(map[int]*Node, numCourses)
-
 	for _, prerequisite := range prerequisites {
-		for _, course := range prerequisite {
-			if _, ok := nodes[course]; !ok {
-				nodes[course] = &Node{val: course}
+		for _, item := range prerequisite {
+			if _, ok := nodes[item]; !ok {
+				nodes[item] = &Node{
+					children:  nil,
+					val:       item,
+					notCircle: false,
+					visited:   false,
+				}
 			}
 		}
-		child, parent := nodes[prerequisite[0]], nodes[prerequisite[1]]
-		parent.children = append(parent.children, child)
+		child, parent := prerequisite[0], prerequisite[1]
+		nodes[parent].children = append(nodes[parent].children, nodes[child])
 	}
 	for _, node := range nodes {
-		if !node.notCircle && node.existCircle() {
+		if node.existCircle() {
 			return false
 		}
 	}
 	return true
 }
-
 
 func canFinishBFS(numCourses int, prerequisites [][]int) bool {
 	courseChildren := make(map[int][]int, numCourses)
