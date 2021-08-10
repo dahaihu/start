@@ -23,6 +23,7 @@ class Solution:
             for j in range(n):
                 if board[i][j] == 'X':
                     continue
+                # the following is talking about 'O'
                 if i == 0 or i == m - 1 or j == 0 or j == n - 1:
                     union(i * n + j, dummy)
                 else:

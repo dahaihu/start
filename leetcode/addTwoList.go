@@ -20,12 +20,14 @@ func addList(l1, l2 *ListNode, carry int) *ListNode {
 	node.Next = addList(getNodeNext(l1), getNodeNext(l2), carry)
 	return node
 }
+
 func getNodeNext(node *ListNode) *ListNode {
 	if node == nil {
 		return nil
 	}
 	return node.Next
 }
+
 func getNodeVal(node *ListNode) int {
 	if node == nil {
 		return 0
