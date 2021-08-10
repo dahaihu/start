@@ -36,3 +36,38 @@ func heapSort(array []int) {
 		adjust(0, i, array)
 	}
 }
+
+func selectHeapSort(nums []int) {
+	// first step: make nums to big heap
+	for i := 1; i < len(nums); i++ {
+		cur, num := i, nums[i]
+		for cur != 0 {
+			parent := (cur - 1) / 2
+			if nums[parent] >= num {
+				break
+			}
+			nums[cur] = nums[parent]
+			cur = parent
+		}
+		nums[cur] = num
+	}
+	for end := len(nums) - 1; end >= 0; end-- {
+		nums[end], nums[0] = nums[0], nums[end]
+		cur, num := 0, nums[0]
+		for cur < end {
+			maxChild := 2*cur + 1
+			if maxChild >= end {
+				break
+			}
+			if rightChild := maxChild + 1;
+				rightChild < end && nums[rightChild] > nums[maxChild] {
+				maxChild = rightChild
+			}
+			if nums[maxChild] <= num {
+				break
+			}
+			cur, nums[cur] = maxChild, nums[maxChild]
+		}
+		nums[cur] = num
+	}
+}
