@@ -1,24 +1,23 @@
 class Solution:
     def numIslands(self, grid):
-        def dfs(grid, x, y):
-            if x < 0 or x >= len(grid) or \
-                    y < 0 or y >= len(grid[0]) or \
-                    grid[x][y] == '0':
-                return
-            grid[x][y] = '0'
-            dfs(grid, x - 1, y)
-            dfs(grid, x + 1, y)
-            dfs(grid, x, y - 1)
-            dfs(grid, x, y + 1)
-
         nums = 0
-        for x in range(len(grid)):
-            for y in range(len(grid[0])):
-                if grid[x][y] == '1':
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if grid[i][j] == '1':
                     nums += 1
-                    dfs(grid, x, y)
-
+                    self.traverse(grid, i, j)
         return nums
+
+    def traverse(self, grid, i, j):
+        if i < 0 or i >= len(grid) \
+                or j < 0 or j >= len(grid[0]) \
+                or grid[i][j] == '0':
+            return
+        grid[i][j] = '0'
+        self.traverse(grid, i + 1, j)
+        self.traverse(grid, i - 1, j)
+        self.traverse(grid, i, j + 1)
+        self.traverse(grid, i, j - 1)
 
 
 if __name__ == '__main__':
@@ -26,4 +25,4 @@ if __name__ == '__main__':
         [["1", "1", "0", "0", "0"],
          ["1", "1", "1", "0", "0"],
          ["0", "0", "0", "1", "0"],
-         ["0", "0", "1", "0", "1"]]))
+         ["0", "0", "1", "1", "1"]]))
