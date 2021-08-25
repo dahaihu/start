@@ -95,11 +95,16 @@ def solve(board):
         if i == 0 or i == m-1:
             for j in range(1, n):
                 if board[i][j] == 'O':
-                    dfs(board, i, n, j, n)
+                    dfs(board, i, m, j, n)
+    for i in range(m):
+        for j in range(n):
+            if board[i][j] == 'O':
+                board[i][j] = 'X'
+
     for i in range(m):
         for j in range(n):
             if board[i][j] == 'A':
-                board[i][j] = 'X'
+                board[i][j] = 'O'
 
 
 if __name__ == '__main__':
