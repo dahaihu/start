@@ -44,6 +44,8 @@ curl -X POST -H 'Content-Type: application/json' -d '{
   ]
 }' 'http://localhost:9200/group/_doc'
 
+
+
 # group role update
 curl -X POST -H 'Content-Type: application/json' -d '{
     "script": {
@@ -58,12 +60,12 @@ curl -X POST -H 'Content-Type: application/json' -d '{
 
 curl -X DELETE 'http://localhost:9200/group'
 
-# add nested index
+# nested field create, update, delete
 curl -X PUT -H 'Content-Type: application/json' -d '
 {
     "mappings": {
          "properties" : {
-             "comments" : {
+             "user_role" : {
                  "type" : "nested",
                  "properties" : {
                      "user_id" : { "type" : "long" },
@@ -73,6 +75,17 @@ curl -X PUT -H 'Content-Type: application/json' -d '
          }
     }
 }' 'http://localhost:9200/resource'
+
+curl -X POST -H 'Content-Type: application/json' -d '{
+    "name":"zhangsan",
+    "user_role":[{
+        "user_id":1,
+        "role_id":2
+    }]
+}' 'http://localhost:9200/resource/_doc/1'
+curl -XPOST -H 'Content-type: application/json' -d '{"script":{"lang": "painless","params":{"item":{"role_id":1,"user_id":10}},"source":"ctx._source.user_role.add(params.item)"}}' localhost:9200/resource/_doc/1/_update
+curl -XPOST -H 'Content-type: application/json' -d '{"script":{"params":{"user_id":10},"source":"ctx._source.user_role.removeIf(item -\u003e item.user_id == params.user_id)"}}' localhost:9200/resource/_doc/1/_update
+curl -XPOST -H 'Content-type: application/json' -d '{"script":{"params":{"role_id":100,"user_id":100},"source":"ctx._source.user_role.removeIf(item -\u003e item.user_id == params.user_id); ctx._source.user_role.add(params)"}}' localhost:9200/resource/_doc/1/_update
 
 curl -X POST -H 'Content-Type: application/json' -d '{
   "tags" : "zhoujielun",
