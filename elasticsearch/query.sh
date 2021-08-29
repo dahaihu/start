@@ -63,17 +63,16 @@ curl -X PUT -H 'Content-Type: application/json' -d '
 {
     "mappings": {
          "properties" : {
-             "tags" : { "type" : "text" },
              "comments" : {
                  "type" : "nested",
                  "properties" : {
-                     "username" : { "type" : "text" },
-                     "comment" : { "type" : "text" }
+                     "user_id" : { "type" : "long" },
+                     "role_id" : { "type" : "long" }
                  }
              }
          }
     }
-}' 'http://localhost:9200/issues'
+}' 'http://localhost:9200/resource'
 
 curl -X POST -H 'Content-Type: application/json' -d '{
   "tags" : "zhoujielun",
