@@ -37,6 +37,12 @@ func heapSort(array []int) {
 	}
 }
 
+func heapfy(array []int) {
+	for i := len(array)/2 - 1; i >= 0; i-- {
+		adjust(i, len(array), array)
+	}
+}
+
 func selectHeapSort(nums []int) {
 	// first step: make nums to big heap
 	for i := 1; i < len(nums); i++ {
@@ -70,4 +76,79 @@ func selectHeapSort(nums []int) {
 		}
 		nums[cur] = num
 	}
+}
+
+type Heap struct {
+	nums []int
+}
+
+func NewBigHeap(nums []int) *Heap {
+	h := &Heap{nums: nums}
+	h.heap()
+	return h
+}
+
+func (h *Heap) heap() {
+	for i := 1; i < len(h.nums); i++ {
+		h.adjustFromBottomToTop(i)
+	}
+}
+
+func (h *Heap) adjustFromBottomToTop(startIdx int) {
+	num, j := h.nums[startIdx], startIdx
+	for j > 0 {
+		parent := (j - 1) / 2
+		if h.nums[parent] >= num {
+			break
+		}
+		h.nums[j] = h.nums[parent]
+		j = parent
+		parent = (j - 1) / 2
+	}
+	h.nums[j] = num
+}
+
+func (h *Heap) adjustFromTopToBottom(adjustIdx, endIdx int) {
+	for {
+		maxChild := adjustIdx*2 + 1
+		if maxChild >= endIdx {
+			break
+		}
+		if rightChild := maxChild + 1;
+			rightChild < endIdx && h.nums[rightChild] > h.nums[maxChild] {
+			maxChild = rightChild
+		}
+		if h.nums[maxChild] <= h.nums[adjustIdx] {
+			break
+		}
+		h.nums[maxChild], h.nums[adjustIdx] = h.nums[adjustIdx], h.nums[maxChild]
+		adjustIdx = maxChild
+	}
+}
+
+func (h *Heap) Add(array ...int) {
+	for _, ele := range array {
+		h.nums = append(h.nums, ele)
+		h.adjustFromBottomToTop(len(h.nums) - 1)
+	}
+}
+
+func (h *Heap) Pop() int {
+	num := h.nums[0]
+	h.nums[0] = h.nums[len(h.nums)-1]
+	h.nums = h.nums[:len(h.nums)-1]
+	h.adjustFromTopToBottom(0, len(h.nums)-1)
+	return num
+}
+
+func (h *Heap) Sort() []int {
+	for i := len(h.nums) - 1; i >= 0; i-- {
+		h.nums[i], h.nums[0] = h.nums[0], h.nums[i]
+		h.adjustFromTopToBottom(0, i)
+	}
+	return h.nums[:]
+}
+
+func (h *Heap) Len() int {
+	return len(h.nums)
 }

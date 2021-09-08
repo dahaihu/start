@@ -21,6 +21,7 @@
 # 1 <= m, n <= 200
 # board[i][j] 为 'X' 或 'O'
 
+
 class Solution:
     def __init__(self):
         self.mark = dict()
@@ -90,9 +91,9 @@ def solve(board):
     for i in range(m):
         if board[i][0] == 'O':
             dfs(board, i, m, 0, n)
-        if board[i][n-1] == 'O':
-            dfs(board, i, m, n-1, n)
-        if i == 0 or i == m-1:
+        if board[i][n - 1] == 'O':
+            dfs(board, i, m, n - 1, n)
+        if i == 0 or i == m - 1:
             for j in range(1, n):
                 if board[i][j] == 'O':
                     dfs(board, i, m, j, n)
