@@ -32,7 +32,7 @@ func TestQuickSort(t *testing.T) {
 	nums := randomSequence(1, 10)
 	fmt.Println("nums is ", nums)
 	nums[5] = 5
-	quickMain(nums)
+	quickMain([]int{3,3,2,1,2,3})
 }
 
 

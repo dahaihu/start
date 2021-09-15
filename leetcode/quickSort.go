@@ -5,20 +5,20 @@ import "fmt"
 func sub(nums []int, start, end int) int {
 	left, right := start+1, end
 	for {
-		for left <= right && nums[left] < nums[start] {
-			left += 1
+		for left <= right && nums[left] <= nums[start] {
+			left++
 		}
-		for nums[right] > nums[start] {
-			right -= 1
+		for left <= right && nums[right] >= nums[start] {
+			right--
 		}
 		if left >= right {
 			break
 		}
-		nums[left], nums[right] = nums[right], nums[left]
-		left += 1
-		right -= 1
+		nums[right], nums[left] = nums[left], nums[right]
+		left++
+		right--
 	}
-	nums[right], nums[start] = nums[start], nums[right]
+	nums[start], nums[right] = nums[right], nums[start]
 	return right
 }
 
