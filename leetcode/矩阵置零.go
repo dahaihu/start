@@ -1,20 +1,49 @@
 package leetcode
 
+import "fmt"
+
 func setZeroes(matrix [][]int) {
-	xMark, yMark := make([]bool, len(matrix)), make([]bool, len(matrix[0]))
-	for x := 0; x < len(matrix); x++ {
-		for y := 0; y < len(matrix[0]); y++ {
-			if matrix[x][y] == 0 {
-				xMark[x] = true
-				yMark[y] = true
+	var row0ExistZero, column0ExistZero bool
+	for column := 0; column < len(matrix[0]); column++ {
+		if matrix[0][column] == 0 {
+			row0ExistZero = true
+			break
+		}
+	}
+	for row := 0; row < len(matrix); row++ {
+		if matrix[row][0] == 0 {
+			column0ExistZero = true
+			break
+		}
+	}
+
+	for row := 0; row < len(matrix); row++ {
+		for column := 0; column < len(matrix[0]); column++ {
+			if matrix[row][column] == 0 {
+				matrix[row][0] = 0
+				matrix[0][column] = 0
 			}
 		}
 	}
-	for x := 0; x < len(matrix); x++ {
-		for y := 0; y < len(matrix[0]); y++ {
-			if xMark[x] || yMark[y] {
-				matrix[x][y] = 0
+	fmt.Println("first step result is ", matrix)
+	for row := 1; row < len(matrix); row++ {
+		for column := 1; column < len(matrix[0]); column++ {
+			if matrix[row][0] == 0 || matrix[0][column] == 0 {
+				matrix[row][column] = 0
 			}
 		}
 	}
+	fmt.Println("second step result is ", matrix)
+	if row0ExistZero {
+		for column := 0; column < len(matrix[0]); column++ {
+			matrix[0][column] = 0
+		}
+	}
+
+	if column0ExistZero {
+		for row := 0; row < len(matrix); row++ {
+			matrix[row][0] = 0
+		}
+	}
+
 }
