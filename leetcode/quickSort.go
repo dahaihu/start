@@ -11,14 +11,14 @@ func sub(nums []int, start, end int) int {
 		for left <= right && nums[right] >= nums[start] {
 			right--
 		}
-		if left >= right {
+		if left > right {
 			break
 		}
-		nums[right], nums[left] = nums[left], nums[right]
+		nums[left], nums[right] = nums[right], nums[left]
 		left++
 		right--
 	}
-	nums[start], nums[right] = nums[right], nums[start]
+	nums[right], nums[start] = nums[start], nums[right]
 	return right
 }
 

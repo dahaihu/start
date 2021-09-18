@@ -1,7 +1,5 @@
 package leetcode
 
-import "fmt"
-
 func setZeroes(matrix [][]int) {
 	var row0ExistZero, column0ExistZero bool
 	for column := 0; column < len(matrix[0]); column++ {
@@ -25,7 +23,6 @@ func setZeroes(matrix [][]int) {
 			}
 		}
 	}
-	fmt.Println("first step result is ", matrix)
 	for row := 1; row < len(matrix); row++ {
 		for column := 1; column < len(matrix[0]); column++ {
 			if matrix[row][0] == 0 || matrix[0][column] == 0 {
@@ -33,7 +30,6 @@ func setZeroes(matrix [][]int) {
 			}
 		}
 	}
-	fmt.Println("second step result is ", matrix)
 	if row0ExistZero {
 		for column := 0; column < len(matrix[0]); column++ {
 			matrix[0][column] = 0
