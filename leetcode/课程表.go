@@ -77,8 +77,5 @@ func canFinishBFS(numCourses int, prerequisites [][]int) bool {
 		}
 		delete(courseChildren, course)
 	}
-	if len(courseChildren) == 0 {
-		return true
-	}
-	return false
+	return len(courseChildren) == 0
 }
