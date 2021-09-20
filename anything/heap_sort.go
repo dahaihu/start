@@ -6,30 +6,28 @@ package anything
 * A programmer who subconsciously views himself as an artist will enjoy what he does and will do it better ​
  */
 
-func adjust(nums []int, idx, end int) {
-	leftIdx := 2*idx + 1
-	if leftIdx >= end {
+func adjust(nums []int, start, end int) {
+	var maxChild int
+	if maxChild = 2*start + 1; maxChild >= end {
 		return
 	}
-	maxIdx := leftIdx
-	if rightIdx := leftIdx + 1; rightIdx < end && nums[rightIdx] > nums[maxIdx] {
-		maxIdx = rightIdx
+	if rightChild := maxChild + 1;
+		rightChild < end &&
+			nums[rightChild] > nums[maxChild] {
+		maxChild = rightChild
 	}
-
-	if nums[idx] >= nums[maxIdx] {
+	if nums[start] >= nums[maxChild] {
 		return
 	}
-	nums[idx], nums[maxIdx] = nums[maxIdx], nums[idx]
-	adjust(nums, maxIdx, end)
+	nums[start], nums[maxChild] = nums[maxChild], nums[start]
+	adjust(nums, maxChild, end)
 }
-
 func heapSort(nums []int) {
-	length := len(nums)
-	for i := length/2 - 1; i >= 0; i-- {
-		adjust(nums, i, length)
+	for i := len(nums)/2 - 1; i >= 0; i-- {
+		adjust(nums, i, len(nums))
 	}
-	for i := length - 1; i >= 1; i-- {
-		nums[i], nums[0] = nums[0], nums[i]
+	for i := len(nums)-1; i >= 0; i-- {
+		nums[0], nums[i] = nums[i], nums[0]
 		adjust(nums, 0, i)
 	}
 }
