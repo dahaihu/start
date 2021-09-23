@@ -6,7 +6,7 @@ import (
 )
 
 func TestCanFinish(t *testing.T) {
-	prerequisites := [][]int{{2, 0}, {1, 0}, {3, 2}, {4, 2}}
+	prerequisites := [][]int{{2, 0}, {1, 2}, {0, 1}}
 	fmt.Println(canFinish(5, prerequisites))
 }
 

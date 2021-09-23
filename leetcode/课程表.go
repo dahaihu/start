@@ -1,10 +1,10 @@
 package leetcode
 
 type Node struct {
-	children  []*Node
 	val       int
 	notCircle bool
 	visited   bool
+	children  []*Node
 }
 
 func (node *Node) existCircle() bool {
@@ -28,14 +28,9 @@ func (node *Node) existCircle() bool {
 func canFinish(numCourses int, prerequisites [][]int) bool {
 	nodes := make(map[int]*Node, numCourses)
 	for _, prerequisite := range prerequisites {
-		for _, item := range prerequisite {
-			if _, ok := nodes[item]; !ok {
-				nodes[item] = &Node{
-					children:  nil,
-					val:       item,
-					notCircle: false,
-					visited:   false,
-				}
+		for _, node := range prerequisite {
+			if _, ok := nodes[node]; !ok {
+				nodes[node] = &Node{val: node}
 			}
 		}
 		child, parent := prerequisite[0], prerequisite[1]
@@ -50,32 +45,30 @@ func canFinish(numCourses int, prerequisites [][]int) bool {
 }
 
 func canFinishBFS(numCourses int, prerequisites [][]int) bool {
-	courseChildren := make(map[int][]int, numCourses)
-	// 这个地方为什么用切片，而不是字典，需要注意下
-	in := make([]int, numCourses)
+	courseChildren := make(map[int][]int)
+	in := make(map[int]int)
 	for _, prerequisite := range prerequisites {
 		child, parent := prerequisite[0], prerequisite[1]
-		in[child] += 1
+		in[child]++
 		courseChildren[parent] = append(courseChildren[parent], child)
 	}
 	var queue []int
-	// 切片的遍历，包括可能的并没有出现在 prerequisites 中的课程，所以in这个变量最好是切片
-	for course, inCount := range in {
-		if inCount == 0 {
+	for course := 0; course < numCourses; course++ {
+		if in[course] == 0 {
 			queue = append(queue, course)
+			delete(in, course)
 		}
 	}
-
 	for len(queue) != 0 {
 		course := queue[0]
 		queue = queue[1:]
 		for _, child := range courseChildren[course] {
-			in[child] -= 1
+			in[child]--
 			if in[child] == 0 {
 				queue = append(queue, child)
+				delete(in, child)
 			}
 		}
-		delete(courseChildren, course)
 	}
-	return len(courseChildren) == 0
+	return len(in) == 0
 }
