@@ -14,6 +14,66 @@ type Node struct {
 	Parent *Node
 }
 
+func buildTreeSelf(node *Node) (
+	box []string, boxLength, rootStart, rootEnd int,
+) {
+	if node == nil {
+		return nil, 0, 0, 0
+	}
+	leftBox, leftLen, leftRootStart, leftRootEnd := buildTree(node.Left)
+	rightBox, rightLen, rightRootStart, rightRootEnd := buildTree(node.Right)
+
+	rootStr := strconv.Itoa(node.Data)
+	rootLen := len(rootStr)
+	gapSize := rootLen
+
+	var line1, line2 []string
+	if leftLen > 0 {
+		mid := (leftRootStart + leftRootEnd) / 2
+		line1 = append(line1, strings.Repeat(" ", mid+2))
+		line1 = append(line1, strings.Repeat("_", leftLen+1-(mid+2)))
+		line2 = append(line2, strings.Repeat(" ", mid+1)+"/")
+		line2 = append(line2, strings.Repeat(" ", leftLen+1-(mid+2)))
+		rootStart = leftLen + 1
+		gapSize++
+	} else {
+		rootStart = 0
+	}
+	rootEnd = rootStart + rootLen - 1
+	line1 = append(line1, rootStr)
+	line2 = append(line2, strings.Repeat(" ", rootLen))
+	if rightLen > 0 {
+		mid := (rightRootStart + rightRootEnd) / 2
+		line1 = append(line1, strings.Repeat("_", mid))
+		line1 = append(line1, strings.Repeat(" ", 1+rightLen-mid))
+		line2 = append(line2, strings.Repeat(" ", mid)+"\\")
+		line2 = append(line2, strings.Repeat(" ", 1+rightLen-mid-1))
+		gapSize++
+	}
+	box = []string{strings.Join(line1, ""), strings.Join(line2, "")}
+	boxLength = len(box[0])
+	maxHeight := len(leftBox)
+	if rightHeight := len(rightBox); rightHeight > maxHeight {
+		maxHeight = rightHeight
+	}
+	gapStr := strings.Repeat(" ", gapSize)
+	for i := 0; i < maxHeight; i++ {
+		var leftLine, rightLine string
+		if i < len(leftBox) {
+			leftLine = leftBox[i]
+		} else {
+			leftLine = strings.Repeat(" ", leftLen)
+		}
+		if i < len(rightBox) {
+			rightLine = rightBox[i]
+		} else {
+			rightLine = strings.Repeat(" ", rightLen)
+		}
+		box = append(box, leftLine+gapStr+rightLine)
+	}
+	return
+}
+
 func buildTree(node *Node) (
 	box []string, boxLength, rootStart, rootEnd int,
 ) {
@@ -308,8 +368,8 @@ func main() {
 	avlTree.Insert(4)
 	avlTree.Insert(5)
 	avlTree.Insert(6)
-	avlTree.Insert(7)
-	box, _ , _, _ := buildTree(avlTree.Tree)
+	//avlTree.Insert(7)
+	box, _, _, _ := buildTreeSelf(avlTree.Tree)
 	for _, line := range box {
 		fmt.Println(line)
 	}
