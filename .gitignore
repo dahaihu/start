@@ -49,3 +49,6 @@
 !sync_map/*
 !yml
 !yml/*
+!/leetcode/binary_tree.py
+!/avl_tree
+!/avl_tree/*
