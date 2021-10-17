@@ -89,7 +89,7 @@ func (lfu *LFUCache) increment(ele *list.Element) {
 	realNode := ele.Value.(*lfuNode)
 	freqNode := realNode.freqNode
 	realFreqNode := freqNode.Value.(*frequencyNode)
-
+	// why ele.list is nil
 	realFreqNode.itemsList.Remove(ele)
 	delete(realFreqNode.items, realNode.key)
 
@@ -99,11 +99,14 @@ func (lfu *LFUCache) increment(ele *list.Element) {
 		next := newFrequencyNode(realFreqNode.frequency + 1)
 		pushedEle := next.itemsList.PushFront(realNode)
 		next.items[realNode.key] = pushedEle
+		lfu.items[realNode.key] = pushedEle
 		realNode.freqNode = lfu.list.InsertAfter(next, freqNode)
 	} else {
 		realNode.freqNode = nextFreq
 		insertedFreq := nextFreq.Value.(*frequencyNode)
-		insertedFreq.items[realNode.key] = insertedFreq.itemsList.PushFront(realNode)
+		pushedEle := insertedFreq.itemsList.PushFront(realNode)
+		insertedFreq.items[realNode.key] = pushedEle
+		lfu.items[realNode.key] = pushedEle
 	}
 
 	if len(realFreqNode.items) == 0 {
