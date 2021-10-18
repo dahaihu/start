@@ -6,7 +6,7 @@ import (
 )
 
 func TestLFUCASE(t *testing.T) {
-	lfu := Constructor(3)
+	lfu := LFUConstructor(3)
 	for i := 0; i <= 10; i++ {
 		lfu.Put(3, 3)
 	}
@@ -14,7 +14,7 @@ func TestLFUCASE(t *testing.T) {
 }
 
 func TestLFU(t *testing.T) {
-	lfu := Constructor(10)
+	lfu := LFUConstructor(10)
 	lfu.Put(10, 13)
 	lfu.Put(3, 17)
 	lfu.Put(6, 11)

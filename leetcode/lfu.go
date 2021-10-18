@@ -36,7 +36,7 @@ type LFUCache struct {
 	items map[int]*list.Element
 }
 
-func Constructor(cap int) *LFUCache {
+func LFUConstructor(cap int) *LFUCache {
 	return &LFUCache{
 		capacity: cap,
 		list:     list.New(),
