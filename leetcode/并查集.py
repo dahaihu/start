@@ -74,39 +74,41 @@ class Solution:
                     board[x][y] = 'X'
 
 
-def dfs(board, i, m, j, n):
-    if i < 0 or i >= m or j < 0 or j >= n or board[i][j] != 'O':
+def dfs(board, x, y, margin_x, margin_y):
+    if x >= margin_x or x < 0 or y >= margin_y or y < 0 or board[x][y] != 'O':
         return
-    board[i][j] = 'A'
-    dfs(board, i - 1, m, j, n)
-    dfs(board, i + 1, m, j, n)
-    dfs(board, i, m, j - 1, n)
-    dfs(board, i, m, j + 1, n)
+    board[x][y] = 'A'
+    dfs(board, x - 1, y, margin_x, margin_y)
+    dfs(board, x + 1, y, margin_x, margin_y)
+    dfs(board, x, y - 1, margin_x, margin_y)
+    dfs(board, x, y + 1, margin_x, margin_y)
 
 
 def solve(board):
-    if len(board) == 0 or len(board[0]) == 0:
+    margin_x = len(board)
+    if margin_x <= 1:
         return
-    m, n = len(board), len(board[0])
-    for i in range(m):
+    margin_y = len(board[0])
+    if margin_y <= 1:
+        return
+    for i in range(margin_x):
         if board[i][0] == 'O':
-            dfs(board, i, m, 0, n)
-        if board[i][n - 1] == 'O':
-            dfs(board, i, m, n - 1, n)
-        if i == 0 or i == m - 1:
-            for j in range(1, n):
-                if board[i][j] == 'O':
-                    dfs(board, i, m, j, n)
-    for i in range(m):
-        for j in range(n):
+            dfs(board, i, 0, margin_x, margin_y)
+        if board[i][margin_y-1] == 'O':
+            dfs(board, i, margin_y-1, margin_x, margin_y)
+    for i in range(1, margin_y-1):
+        if board[0][i] == 'O':
+            dfs(board, 0, i, margin_x, margin_y)
+        if board[margin_x-1][i] == 'O':
+            dfs(board, margin_x-1, i, margin_x, margin_y)
+    for i in range(margin_x):
+        for j in range(margin_y):
             if board[i][j] == 'O':
                 board[i][j] = 'X'
-
-    for i in range(m):
-        for j in range(n):
+    for i in range(margin_x):
+        for j in range(margin_y):
             if board[i][j] == 'A':
                 board[i][j] = 'O'
-
 
 if __name__ == '__main__':
     s = Solution()
