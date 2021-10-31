@@ -1,33 +1,30 @@
 package leetcode
 
-func NextPermutation(nums []int) {
-	margin := -1
+func nextPermutation(nums []int) {
+	var peekIndex int
 	for i := len(nums) - 2; i >= 0; i-- {
 		if nums[i] < nums[i+1] {
-			margin = i
+			peekIndex = i + 1
 			break
 		}
 	}
-	if margin == -1 {
-		swap(nums, 0, len(nums)-1)
+	if peekIndex == 0 {
+		reverseArray(nums, 0, len(nums)-1)
 		return
 	}
-
-	bigger := -1
-	for i := len(nums) - 1; i > margin; i-- {
-		if nums[i] > nums[margin] {
-			bigger = i
-			break
+	for i := len(nums)-1; i >= peekIndex; i-- {
+		if nums[i] > nums[peekIndex-1] {
+			nums[i], nums[peekIndex-1] = nums[peekIndex-1], nums[i]
+			reverseArray(nums, peekIndex, len(nums)-1)
+			return
 		}
 	}
-	nums[margin], nums[bigger] = nums[bigger], nums[margin]
-	swap(nums, margin+1, len(nums)-1)
 }
 
-func swap(nums []int, start, end int) {
+func reverseArray(nums []int, start, end int) {
 	for start < end {
 		nums[start], nums[end] = nums[end], nums[start]
-		start = start + 1
-		end = end - 1
+		start++
+		end--
 	}
 }

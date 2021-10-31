@@ -5,23 +5,23 @@ func maxSlidingWindow(nums []int, k int) []int {
 		return nums
 	}
 	window := make([]int, 0, k)
-	for i := 0; i < k; i++ {
-		for len(window) > 0 && window[len(window)-1] < nums[i] {
+	push := func(index int) {
+		for len(window) > 0 && nums[window[len(window)-1]] < nums[index] {
 			window = window[:len(window)-1]
 		}
-		window = append(window, nums[i])
+		window = append(window, index)
+	}
+	for i := 0; i < k; i++ {
+		push(i)
 	}
 	result := make([]int, 0, len(nums)-k+1)
-	result = append(result, window[0])
-	for idx, num := range nums[k:] {
-		if len(window) > 0 && window[0] == nums[idx] {
+	result = append(result, nums[window[0]])
+	for i := k; i < len(nums); i++ {
+		if window[0] == i-k {
 			window = window[1:]
 		}
-		for len(window) > 0 && window[len(window)-1] < num {
-			window = window[:len(window)-1]
-		}
-		window = append(window, num)
-		result = append(result, window[0])
+		push(i)
+		result = append(result, nums[window[0]])
 	}
 	return result
 }
