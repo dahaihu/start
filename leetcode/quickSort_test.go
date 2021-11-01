@@ -1,7 +1,6 @@
 package leetcode
 
 import (
-	"fmt"
 	"math/rand"
 	"testing"
 	"time"
@@ -28,18 +27,33 @@ func randomSequence(min, max int) []int {
 	return arr
 }
 
+func invalidSortedArray(nums []int) bool {
+	pre := nums[0]
+	for i := 1; i < len(nums); i++ {
+		if nums[i] < pre {
+			return true
+		}
+		pre = nums[i]
+	}
+	return false
+}
+
 func TestQuickSort(t *testing.T) {
-	nums := randomSequence(1, 10)
-	fmt.Println("nums is ", nums)
-	nums[5] = 5
-	quickMain([]int{3,3,2,1,2,3})
+	for i := 0; i <= 1000; i++ {
+		nums := randomSequence(1, 10)
+		nums[5] = 5
+		quickMain(nums)
+		if invalidSortedArray(nums) {
+			t.Fatalf("invalid sorted array %v", nums)
+		}
+	}
 }
 
 
 func TestSplit(t *testing.T) {
-	nums := randomSequence(1, 10)
-	nums[5] = 5
-	right, left := splitArray(nums, 5)
-	fmt.Println(right, left, nums)
+	//nums := randomSequence(1, 10)
+	//nums[5] = 5
+	//right, left := splitArray(nums, 5)
+	//fmt.Println(right, left, nums)
 
 }

@@ -115,12 +115,12 @@ func (lfu *LFUCache) increment(ele *list.Element) {
 }
 
 func (lfu *LFUCache) Put(key, value int) {
-	if lfu.capacity == 0 {
-		return
-	}
 	if item, ok := lfu.items[key]; !ok {
 		if len(lfu.items) == lfu.capacity {
 			lfu.evict()
+		}
+		if len(lfu.items) == lfu.capacity {
+			return
 		}
 		head := lfu.list.Front()
 		if head == nil {

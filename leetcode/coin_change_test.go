@@ -7,7 +7,7 @@ import (
 
 func Test_coinChange(t *testing.T) {
 	//fmt.Println(coinChange([]int{186, 419, 83, 408}, 6249))
-	fmt.Println(coinChange([]int{1, 2, 5}, 10))
+	fmt.Println(change([]int{1, 2, 5}, 0))
 	//fmt.Println(coinChange([]int{2}, 3))
 	//fmt.Println(coinChange([]int{1, 2, 5}, 10))
 }

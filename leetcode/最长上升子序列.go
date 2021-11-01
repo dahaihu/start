@@ -28,10 +28,10 @@ func lengthOfLIS(nums []int) int {
 	return max
 }
 
-func lengthOfLISBest(nums []int) int {
+func lengthOfLISBest(nums []int) []int {
 	length := len(nums)
 	if length <= 1 {
-		return length
+		return nums
 	}
 	mark := make([]int, 1)
 	mark[0] = nums[0]
@@ -43,7 +43,7 @@ func lengthOfLISBest(nums []int) int {
 		pos := position(mark, nums[idx])
 		mark[pos] = nums[idx]
 	}
-	return len(mark)
+	return mark
 }
 
 func position(nums []int, val int) int {
