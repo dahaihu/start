@@ -7,28 +7,30 @@ package leetcode
  */
 
 import (
-	"bytes"
 	"strconv"
+	"strings"
 )
-func ConvertToBase7(num int) string {
-	mark := make([]string, 0)
-	tag := ""
+
+func convertToBase7(num int) string {
 	if num == 0 {
 		return "0"
-	} else if num < 0 {
-		num = -num
+	}
+	var tag string
+	if num < 0 {
 		tag = "-"
+		num = (-1) * num
 	}
-	var remaining int
+	mark := make([]string, 0, 3)
+	var left int
 	for num != 0 {
-		// 下面两个顺序还不能反了
-		remaining, num = num % 7, num / 7
-		mark = append(mark, strconv.Itoa(remaining))
+		num, left = num/7, num%7
+		mark = append(mark, strconv.Itoa(left))
 	}
-	buffer := bytes.Buffer{}
-	buffer.WriteString(tag)
-	for i := len(mark) - 1; i >= 0; i-- {
-		buffer.WriteString(mark[i])
+	left, right := 0, len(mark)-1
+	for left < right {
+		mark[left], mark[right] = mark[right], mark[left]
+		left++
+		right--
 	}
-	return buffer.String()
+	return tag + strings.Join(mark, "")
 }
