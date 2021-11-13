@@ -2,9 +2,10 @@ package cache
 
 import (
 	"fmt"
-	"github.com/golang/groupcache/singleflight"
 	"sync"
 	"time"
+
+	"github.com/golang/groupcache/singleflight"
 )
 
 func search() (interface{}, error) {
