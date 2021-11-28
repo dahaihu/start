@@ -23,15 +23,13 @@ func (g *Group) Do(key string, fn func() (interface{}, error)) (interface{}, err
 		c.wg.Wait()
 		return c.val, c.err
 	}
-
 	c := new(caller)
-	g.g[key] = c
 	c.wg.Add(1)
+	g.g[key] = c
 	g.mu.Unlock()
 
 	c.val, c.err = fn()
 	c.wg.Done()
-
 	g.mu.Lock()
 	delete(g.g, key)
 	g.mu.Unlock()
