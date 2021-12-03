@@ -1,11 +1,9 @@
 package leetcode
 
-import "fmt"
-
 /**
 * @Author: 胡大海
 * @Date: 2019-11-10 12:15
-* A programmer who subconsciously views himself as an artist will enjoy what he does and will do it better ​
+* A programmer who subconsciously views himself as an artist will enpIdxoy what he does and will do it better ​
  */
 
 /*
@@ -61,34 +59,28 @@ p = "mis*is*p*."
 
 // todo 写一个带着图的博客
 func IsMatch(s string, p string) bool {
-	m := len(s)
-	n := len(p)
-	mark := make([][]bool, n+1)
-	for i := 0; i < n+1; i++ {
-		mark[i] = make([]bool, m+1)
+	sLen, pLen := len(s), len(p)
+	mark := make([][]bool, sLen+1)
+	for i := 0; i < sLen+1; i++ {
+		mark[i] = make([]bool, pLen+1)
 	}
 	mark[0][0] = true
-	for i := 2; i < n+1; i++ {
+	for i := 2; i < pLen+1; i++ {
 		if p[i-1] == '*' {
-			mark[i][0] = mark[i-2][0]
+			mark[0][i] = mark[0][i-2]
 		}
 	}
-	// 外层是正则的长度
-	for i := 1; i < n+1; i++ {
-		// 内层是字符串的长度
-		for j := 1; j < m+1; j++ {
-			if p[i-1] == s[j-1] || p[i-1] == '.' {
-				mark[i][j] = mark[i-1][j-1]
-			} else if p[i-1] == '*' {
-				mark[i][j] = mark[i-2][j] || mark[i-1][j]
-				if p[i-2] == '.' || p[i-2] == s[j-1] {
-					mark[i][j] = mark[i][j] || mark[i][j-1]
+	for sIdx := 1; sIdx < sLen+1; sIdx++ {
+		for pIdx := 1; pIdx < pLen+1; pIdx++ {
+			if s[sIdx-1] == p[pIdx-1] || p[pIdx-1] == '.' {
+				mark[sIdx][pIdx] = mark[sIdx-1][pIdx-1]
+			} else if p[pIdx-1] == '*' {
+				mark[sIdx][pIdx] = mark[sIdx][pIdx-1] || mark[sIdx][pIdx-2]
+				if s[sIdx-1] == p[pIdx-2] || p[pIdx-2] == '.' {
+					mark[sIdx][pIdx] = mark[sIdx][pIdx] || mark[sIdx-1][pIdx]
 				}
 			}
 		}
 	}
-	for _, ele := range mark {
-		fmt.Println(ele)
-	}
-	return mark[n][m]
+	return mark[sLen][pLen]
 }

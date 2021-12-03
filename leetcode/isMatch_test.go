@@ -6,8 +6,6 @@ import (
 )
 
 func TestIsMatch(t *testing.T) {
-	s := "hushichang"
-	fmt.Println('1' + '2')
-	fmt.Println(s[:6])
-	//fmt.Println(IsMatch("aa", "*"))
+	fmt.Println(IsMatch("aaa", ".*"))
+	fmt.Println(IsMatch("aab", "c*a*b"))
 }
