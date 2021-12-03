@@ -67,12 +67,10 @@ func isMatch2(s string, p string) bool {
 
 	for i := 1; i < m+1; i++ {
 		for j := 1; j < n+1; j++ {
-			if p[i-1] != '*' && p[i-1] != '?' {
-				mark[i][j] = mark[i-1][j-1] && p[i-1] == s[j-1]
-			} else if p[i-1] == '?' {
+			if p[i-1] == s[j-1] || p[i-1] == '?' {
 				mark[i][j] = mark[i-1][j-1]
-			} else {
-				mark[i][j] = mark[i-1][j] || mark[i-1][j-1] || mark[i][j-1]
+			} else if p[i-1] == '*' {
+				mark[i][j] = mark[i-1][j] || mark[i][j-1] || mark[i-1][j-1]
 			}
 		}
 	}
