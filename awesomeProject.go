@@ -105,9 +105,67 @@ func findMedianSortedArrays(nums1, nums2 []int) float64 {
 	return (float64(leftVal) + float64(rightVal)) / 2
 }
 
+func trap(height []int) int {
+	waters := 0
+	indexes := []int{}
+	for idx, h := range height {
+		preHeight := 0
+		for len(indexes) != 0 && h >= height[indexes[len(indexes)-1]] {
+			preIdx := indexes[len(indexes)-1]
+			waters += (idx - preIdx - 1) * (height[preIdx] - preHeight)
+			preHeight = height[preIdx]
+			indexes = indexes[:len(indexes)-1]
+		}
+		if len(indexes) != 0 {
+			preIdx := indexes[len(indexes)-1]
+			waters += (idx - preIdx - 1) * (h - preHeight)
+		}
+		indexes = append(indexes, idx)
+	}
+	return waters
+}
+
+type element struct {
+	Index  int
+	Height int
+}
+
+func largestRectangleArea(heights []int) int {
+	var mx int
+	mark := make([]*element, 0, len(heights))
+	for idx, height := range heights {
+		if len(mark) == 0 || mark[len(mark)-1].Height < height {
+			mark = append(mark, &element{
+				Index:  idx,
+				Height: height,
+			})
+			continue
+		}
+		var preIdx int
+		for len(mark) != 0 && mark[len(mark)-1].Height >= height {
+			lastItem := mark[len(mark)-1]
+			rectangleArea := (idx - lastItem.Index) * lastItem.Height
+			if rectangleArea > mx {
+				mx = rectangleArea
+			}
+			preIdx = lastItem.Index
+			mark = mark[:len(mark)-1]
+		}
+		mark = append(mark, &element{
+			Index:  preIdx,
+			Height: height,
+		})
+	}
+	for _, ele := range mark {
+		if tmp := ele.Height * (len(heights) - ele.Index); tmp > mx {
+			mx = tmp
+		}
+	}
+	return mx
+}
+
 func main() {
-	nums1 := []int{1, 3}
-	nums2 := []int{2}
-	fmt.Println(splitArray(nums2, nums1))
-	fmt.Println(findMedianSortedArrays(nums1, nums2))
+	// fmt.Println(trap([]int{4, 2, 0, 3, 2, 5}))
+	// fmt.Println(largestRectangleArea([]int{2, 1, 5, 6, 2, 3}))
+	fmt.Println(largestRectangleArea([]int{1, 1}))
 }
