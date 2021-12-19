@@ -164,8 +164,74 @@ func largestRectangleArea(heights []int) int {
 	return mx
 }
 
+type ListNode struct {
+	Val  int
+	Next *ListNode
+}
+
+func (n *ListNode) GetVal() int {
+	if n == nil {
+		return 0
+	}
+	return n.Val
+}
+
+func (n *ListNode) GetNext() *ListNode {
+	if n == nil {
+		return nil
+	}
+	return n.Next
+}
+
+func addTwoNumbers(l1, l2 *ListNode) *ListNode {
+	return _addTwoNumbers(l1, l2, 0)
+
+}
+
+func _addTwoNumbers(l1, l2 *ListNode, carry int) *ListNode {
+	if l1 == nil && l2 == nil && carry == 0 {
+		return nil
+	}
+
+	var node *ListNode
+	if l1 != nil {
+		node = l1
+	} else if l2 != nil {
+		node = l2
+	} else {
+		node = new(ListNode)
+	}
+
+	node.Val = l1.GetVal() + l2.GetVal() + carry
+
+	if node.Val >= 10 {
+		node.Val -= 10
+		carry = 1
+	} else {
+		carry = 0
+	}
+
+	node.Next = _addTwoNumbers(l1.GetNext(), l2.GetNext(), carry)
+	return node
+}
+
 func main() {
-	// fmt.Println(trap([]int{4, 2, 0, 3, 2, 5}))
-	// fmt.Println(largestRectangleArea([]int{2, 1, 5, 6, 2, 3}))
-	fmt.Println(largestRectangleArea([]int{1, 1}))
+	node1 := &ListNode{Val: 2}
+	node2 := &ListNode{Val: 4}
+	node3 := &ListNode{Val: 3}
+	node1.Next = node2
+	node2.Next = node3
+
+	node4 := &ListNode{Val: 5}
+	node5 := &ListNode{Val: 6}
+	node6 := &ListNode{Val: 4}
+	node4.Next = node5
+	node5.Next = node6
+
+	head := addTwoNumbers(node1, node4)
+	for head != nil {
+		fmt.Println(head.Val)
+		head = head.Next
+	}
+
 }
