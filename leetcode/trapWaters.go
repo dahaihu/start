@@ -44,7 +44,7 @@ func getPermutation(n int, k int) string {
 		mark[i] = mark[i-1] * i
 	}
 
-	items := make([]string, n, n)
+	items := make([]string, n)
 	for i := 0; i < n; i++ {
 		items[i] = strconv.Itoa(i + 1)
 	}

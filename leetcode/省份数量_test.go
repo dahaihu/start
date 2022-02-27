@@ -6,5 +6,5 @@ import (
 )
 
 func TestFindCircleNum(t *testing.T) {
-	fmt.Println(findCircleNum([][]int{{1, 0, 0}, {0, 1, 0}, {0, 0, 1}}))
+	fmt.Println(findCircleNum([][]int{{1, 1, 0}, {1, 1, 0}, {0, 0, 1}}))
 }

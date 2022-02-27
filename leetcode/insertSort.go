@@ -7,12 +7,11 @@ import (
 
 func insertSort(arr []int) {
 	for dummy := 1; dummy < len(arr); dummy++ {
-		for mark := dummy-1; mark >= 0 && arr[mark] > arr[mark+1]; mark-- {
-			arr[mark], arr[mark+1] = arr[mark+1], arr[mark]
+		for i := dummy; i > 0 && arr[i-1] > arr[i]; i-- {
+			arr[i], arr[i-1] = arr[i-1], arr[i]
 		}
 	}
 }
-
 
 func main() {
 	c := make(chan string)
@@ -21,7 +20,6 @@ func main() {
 		fmt.Println(data)
 	}
 }
-
 
 func readFromChannel(c chan string, wg *sync.WaitGroup) {
 	defer wg.Done()
