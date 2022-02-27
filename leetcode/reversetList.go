@@ -20,16 +20,3 @@ func reverseList(head *ListNode) *ListNode {
 	}
 	return pre
 }
-
-func reverseListRecursive(head *ListNode) (*ListNode, *ListNode) {
-	if head.Next == nil {
-		return head, head
-	}
-	next := head.Next
-	// 第一个节点后面的节点
-	head.Next = nil
-	prev, res := reverseListRecursive(next)
-	prev.Next = head
-
-	return head, res
-}
