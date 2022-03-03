@@ -1,6 +1,5 @@
 package leetcode
 
-
 func binarySearch(nums []int, target int) int {
 	left, right := 0, len(nums)-1
 	for left <= right {
@@ -15,7 +14,6 @@ func binarySearch(nums []int, target int) int {
 	}
 	return -1
 }
-
 
 func findSortedArrayTargetLeft(nums []int, target int) int {
 	idx := binarySearch(nums, target)
@@ -34,7 +32,6 @@ func findSortedArrayTargetLeft(nums []int, target int) int {
 	return right
 }
 
-
 func findSortedArrayTargetRight(nums []int, target int) int {
 	idx := binarySearch(nums, target)
 	if idx == -1 {
@@ -46,7 +43,7 @@ func findSortedArrayTargetRight(nums []int, target int) int {
 		if nums[mid] == target {
 			left = mid
 		} else {
-			right = mid-1
+			right = mid - 1
 		}
 	}
 	return left

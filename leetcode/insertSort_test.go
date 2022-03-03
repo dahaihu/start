@@ -6,7 +6,7 @@ import (
 )
 
 func TestInsertSort(t *testing.T) {
-	a := []int{1, 2, 4, 3, -1}
+	a := []int{7, 1, 2, 4, 3, -1}
 	insertSort(a)
 	//sort.Slice(a, func(i int, j int) bool { return a[i] < a[j] })
 	fmt.Println(a)

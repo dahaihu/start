@@ -37,39 +37,36 @@ isConnected[i][j] == isConnected[j][i]
 链接：https://leetcode-cn.com/problems/number-of-provinces
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 */
-
-func find(m map[int]int, val int, count *int) int {
-	if _, ok := m[val]; !ok {
+func find(mark map[int]int, target int, count *int) int {
+	if parent, ok := mark[target]; !ok {
 		*count += 1
-		m[val] = val
-		return val
-	}
-	for {
-		parent := m[val]
-		if parent == val {
-			return parent
+		mark[target] = target
+		return target
+	} else {
+		for parent != target {
+			target = parent
+			parent = mark[target]
 		}
-		val = parent
+		return target
 	}
 }
 
-func union(a, b int, m map[int]int, count *int) {
-	aP := find(m, a, count)
-	bP := find(m, b, count)
-	if aP == bP {
-		return
+func union(mark map[int]int, a, b int, count *int) {
+	ancestorA := find(mark, a, count)
+	ancestorB := find(mark, b, count)
+	if ancestorA != ancestorB {
+		*count -= 1
+		mark[ancestorA] = ancestorB
 	}
-	m[aP] = bP
-	*count -= 1
 }
 
 func findCircleNum(isConnected [][]int) int {
 	count := 0
-	m := make(map[int]int)
+	mark := make(map[int]int)
 	for i := 0; i < len(isConnected); i++ {
 		for j := 0; j < len(isConnected[0]); j++ {
 			if isConnected[i][j] == 1 {
-				union(i, j, m, &count)
+				union(mark, i, j, &count)
 			}
 		}
 	}
