@@ -88,7 +88,7 @@ func insertAfter(nums [][]byte, cur, target int) {
 	nums[target] = tmp
 }
 
-func leastInterval2(tasks []byte, n int) [][]byte {
+func leastInterval2(tasks []byte, n int) int {
 	sort.Slice(tasks, func(i, j int) bool { return tasks[i] < tasks[j] })
 	mark := [][]byte{{tasks[0]}}
 	for i := 1; i < len(tasks); i++ {
@@ -100,31 +100,49 @@ func leastInterval2(tasks []byte, n int) [][]byte {
 	}
 	sort.Slice(mark, func(i, j int) bool { return len(mark[i]) > len(mark[j]) })
 	maxHeight := len(mark[0])
-	fmt.Println(mark)
-	for i := n + 1; i < len(mark); i++ {
-		if len(mark[n]) >= maxHeight-1 {
+	maxCnt := 0
+	var notMaxHeight int
+	for i := 0; i < len(mark); i++ {
+		if len(mark[i]) == maxHeight {
+			maxCnt += 1
+		} else {
+			notMaxHeight = i
 			break
 		}
-		nLen := len(mark[n])
-		appendedLen := min(len(mark[i]), maxHeight-1-nLen)
-		mark[n] = append(mark[n], mark[i][:appendedLen]...)
-		mark[i] = mark[i][appendedLen:]
-		target := sort.Search(n, func(j int) bool { return len(mark[j]) < len(mark[n]) })
-		insertAfter(mark, n, target)
-		preHeight := nLen
-		for len(mark[i]) != 0 {
-			usedLen := min(len(mark[i]), maxHeight-1-len(mark[n]))
-			mid := make([]byte, len(mark[n][preHeight-usedLen:]))
-			copy(mid, mark[n][preHeight-usedLen:])
-			mark[n] = append(mark[n][:preHeight-usedLen], mark[i][:usedLen]...)
-			mark[n] = append(mark[n], mid...)
-			mark[i] = mark[i][usedLen:]
-			preHeight = preHeight - usedLen
-			target := sort.Search(n, func(j int) bool { return len(mark[j]) < len(mark[n]) })
-			insertAfter(mark, n, target)
-		}
 	}
-	return mark
+	fmt.Println(mark)
+	defer func() {
+		fmt.Println(mark)
+	}()
+	for i := n + 1; i < len(mark); i++ {
+		fmt.Println(i, mark)
+		if len(mark[n]) >= maxHeight-1 {
+			return len(tasks)
+		}
+		preHeight := maxHeight
+		for len(mark[i]) != 0 {
+			insertedLen := min(len(mark[i]), maxHeight-1-len(mark[n]))
+			midMargin := min(preHeight-insertedLen, len(mark[n]))
+			mid := make([]byte, len(mark[n][midMargin:]))
+			copy(mid, mark[n][midMargin:])
+			mark[n] = append(mark[n][:midMargin], mark[i][:insertedLen]...)
+			mark[n] = append(mark[n], mid...)
+			mark[i] = mark[i][insertedLen:]
+			preHeight = preHeight - insertedLen
+			// target := sort.Search(n, func(j int) bool { return len(mark[j]) < len(mark[n]) })
+			// insertAfter(mark, n, target)
+			if len(mark[n]) == maxHeight-1 {
+				mark[notMaxHeight], mark[n] = mark[n], mark[notMaxHeight]
+				notMaxHeight += 1
+				if notMaxHeight > n {
+					return len(tasks)
+				}
+			}
+		}
+		fmt.Println(i, mark)
+	}
+	fmt.Println(mark)
+	return (maxHeight-1)*(n+1) + maxCnt
 }
 
 func leastIntervalBetter(tasks []byte, n int) int {
