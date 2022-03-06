@@ -154,11 +154,9 @@ func leastIntervalBetter(tasks []byte, n int) int {
 	for _, cnt := range cnts {
 		if cnt > maxCnt {
 			maxCnt = cnt
-		}
-	}
-	for _, cnt := range cnts {
-		if cnt == maxCnt {
-			equalMaxCnt++
+			equalMaxCnt = 1
+		} else if cnt == maxCnt {
+			equalMaxCnt += 1
 		}
 	}
 

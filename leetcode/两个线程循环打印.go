@@ -40,3 +40,24 @@ func twoThreadPrint(times int) {
 	one <- signal
 	wg.Wait()
 }
+
+func twoThreadPrintUsingSignal() {
+	var num int
+	total := 10
+	cond := sync.NewCond(new(sync.Mutex))
+	for i := 0; i < total; i++ {
+		go func(idx int) {
+			for {
+				cond.L.Lock()
+				for idx != num {
+					cond.Wait()
+				}
+				fmt.Println(idx)
+				num = (idx + 1) % total
+				cond.Broadcast()
+				cond.L.Unlock()
+			}
+		}(i)
+	}
+	select {}
+}
