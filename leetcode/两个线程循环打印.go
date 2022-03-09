@@ -11,10 +11,8 @@ type User struct {
 }
 
 func twoThreadPrint(times int) {
-	one, two := make(chan struct{}), make(chan struct{})
 	signal := struct{}{}
-	wg := new(sync.WaitGroup)
-	wg.Add(1)
+	one, two := make(chan struct{}), make(chan struct{})
 	go func() {
 		for {
 			_, ok := <-one
@@ -24,9 +22,11 @@ func twoThreadPrint(times int) {
 			fmt.Println(1)
 			two <- signal
 		}
-		wg.Done()
 	}()
+	var wg sync.WaitGroup
+	wg.Add(1)
 	go func() {
+		defer wg.Done()
 		for i := 0; i < times; i++ {
 			<-two
 			fmt.Println(2)
@@ -43,9 +43,9 @@ func twoThreadPrint(times int) {
 
 func twoThreadPrintUsingSignal() {
 	var num int
-	total := 10
 	cond := sync.NewCond(new(sync.Mutex))
-	for i := 0; i < total; i++ {
+	count := 10
+	for i := 0; i < count; i++ {
 		go func(idx int) {
 			for {
 				cond.L.Lock()
@@ -53,7 +53,7 @@ func twoThreadPrintUsingSignal() {
 					cond.Wait()
 				}
 				fmt.Println(idx)
-				num = (idx + 1) % total
+				num = (idx + 1) % count
 				cond.Broadcast()
 				cond.L.Unlock()
 			}

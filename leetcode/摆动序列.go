@@ -9,10 +9,11 @@ func wiggleMaxLength(nums []int) int {
 	preStatus := 100
 	count := 1
 	for i := 1; i < len(nums); i++ {
-		var status int
 		if nums[i] == nums[i-1] {
 			continue
-		} else if nums[i] > nums[i-1] {
+		}
+		var status int
+		if nums[i] > nums[i-1] {
 			status = bigger
 		} else {
 			status = smaller
@@ -24,6 +25,5 @@ func wiggleMaxLength(nums []int) int {
 			preStatus = status
 		}
 	}
-
 	return count
 }

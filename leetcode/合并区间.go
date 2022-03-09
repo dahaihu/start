@@ -20,7 +20,6 @@ package leetcode
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 */
 import (
-	"fmt"
 	"sort"
 )
 
@@ -29,16 +28,16 @@ func merge(intervals [][]int) [][]int {
 		return intervals
 	}
 	sort.Slice(intervals, func(i, j int) bool {
-		return intervals[i][1] <= intervals[j][1]
+		return intervals[i][0] <= intervals[j][0]
 	})
-	fmt.Println("sorted interals ", intervals)
 	result := [][]int{intervals[0]}
 	for i := 1; i < len(intervals); i++ {
 		last := result[len(result)-1]
-		if last[1] < intervals[i][0] {
-			result = append(result, intervals[i])
-		} else if intervals[i][1] > last[1] {
-			last[1] = intervals[i][1]
+		cur := intervals[i]
+		if last[1] < cur[0] {
+			result = append(result, cur)
+		} else if cur[1] > last[1] {
+			last[1] = cur[1]
 		}
 	}
 	return result
