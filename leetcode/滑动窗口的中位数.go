@@ -1,7 +1,6 @@
 package leetcode
 
 import (
-	"fmt"
 	"sort"
 )
 
@@ -13,25 +12,17 @@ func medianSlidingWindow(nums []int, k int) []float64 {
 	sort.Ints(mark)
 	result := []float64{mid(mark)}
 	for i := k; i < len(nums); i++ {
-		fmt.Printf("original mark is %v\n", mark)
-		fmt.Printf("remove ele %d, insert target %d\n", nums[i-k], nums[i])
-		insertTarget := sort.Search(k,
-			func(j int) bool { return mark[j] > nums[i] })
-		fmt.Printf("isnret indx %d\n", insertTarget)
-		removeTarget := sort.Search(k,
-			func(j int) bool { return mark[j] <= nums[i-k] })
-		fmt.Printf("remove indx %d\n", removeTarget)
-		if insertTarget > removeTarget {
-			for j := removeTarget; j < insertTarget; j++ {
-				mark[j] = mark[j+1]
-			}
-		} else if insertTarget < removeTarget {
-			for j := removeTarget; j > insertTarget; j-- {
-				mark[j] = mark[j-1]
-			}
+		rmIdx := sort.Search(k,
+			func(j int) bool { return mark[j] >= nums[i-k] })
+		for i := rmIdx; i < k-1; i++ {
+			mark[i] = mark[i+1]
 		}
-		fmt.Println(mark, nums[i], nums[i-k], insertTarget, removeTarget)
-		mark[insertTarget] = nums[k]
+		adIdx := sort.Search(k-1,
+			func(j int) bool { return mark[j] >= nums[i] })
+		for j := k - 1; j > adIdx; j-- {
+			mark[j] = mark[j-1]
+		}
+		mark[adIdx] = nums[i]
 		result = append(result, mid(mark))
 	}
 	return result
@@ -39,7 +30,7 @@ func medianSlidingWindow(nums []int, k int) []float64 {
 
 func mid(nums []int) float64 {
 	res := nums[len(nums)/2]
-	if len(nums)%2 == 0 {
+	if len(nums)%2 == 1 {
 		return float64(res)
 	}
 	return (float64(nums[len(nums)-1]) + float64(res)) / 2
