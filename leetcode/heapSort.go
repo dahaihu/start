@@ -78,23 +78,23 @@ func selectHeapSort(nums []int) {
 	}
 }
 
-type Heap struct {
+type SelfHeap struct {
 	nums []int
 }
 
-func NewBigHeap(nums []int) *Heap {
-	h := &Heap{nums: nums}
+func NewBigHeap(nums []int) *SelfHeap {
+	h := &SelfHeap{nums: nums}
 	h.heap()
 	return h
 }
 
-func (h *Heap) heap() {
+func (h *SelfHeap) heap() {
 	for i := 1; i < len(h.nums); i++ {
 		h.adjustFromBottomToTop(i)
 	}
 }
 
-func (h *Heap) adjustFromBottomToTop(startIdx int) {
+func (h *SelfHeap) adjustFromBottomToTop(startIdx int) {
 	num, j := h.nums[startIdx], startIdx
 	for j > 0 {
 		parent := (j - 1) / 2
@@ -108,7 +108,7 @@ func (h *Heap) adjustFromBottomToTop(startIdx int) {
 	h.nums[j] = num
 }
 
-func (h *Heap) adjustFromTopToBottom(adjustIdx, endIdx int) {
+func (h *SelfHeap) adjustFromTopToBottom(adjustIdx, endIdx int) {
 	for {
 		maxChild := adjustIdx*2 + 1
 		if maxChild >= endIdx {
@@ -126,14 +126,14 @@ func (h *Heap) adjustFromTopToBottom(adjustIdx, endIdx int) {
 	}
 }
 
-func (h *Heap) Add(array ...int) {
+func (h *SelfHeap) Add(array ...int) {
 	for _, ele := range array {
 		h.nums = append(h.nums, ele)
 		h.adjustFromBottomToTop(len(h.nums) - 1)
 	}
 }
 
-func (h *Heap) Pop() int {
+func (h *SelfHeap) Pop() int {
 	num := h.nums[0]
 	h.nums[0] = h.nums[len(h.nums)-1]
 	h.nums = h.nums[:len(h.nums)-1]
@@ -141,7 +141,7 @@ func (h *Heap) Pop() int {
 	return num
 }
 
-func (h *Heap) Sort() []int {
+func (h *SelfHeap) Sort() []int {
 	for i := len(h.nums) - 1; i >= 0; i-- {
 		h.nums[i], h.nums[0] = h.nums[0], h.nums[i]
 		h.adjustFromTopToBottom(0, i)
@@ -149,6 +149,6 @@ func (h *Heap) Sort() []int {
 	return h.nums[:]
 }
 
-func (h *Heap) Len() int {
+func (h *SelfHeap) Len() int {
 	return len(h.nums)
 }
