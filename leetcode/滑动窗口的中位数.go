@@ -1,28 +1,19 @@
 package leetcode
 
-import (
-	"sort"
-)
+import "sort"
 
 func medianSlidingWindow(nums []int, k int) []float64 {
-	mark := make([]int, 0, k)
-	for i := 0; i < k; i++ {
-		mark = append(mark, nums[i])
-	}
+	mark := make([]int, k)
+	copy(mark, nums[:k])
 	sort.Ints(mark)
 	result := []float64{mid(mark)}
 	for i := k; i < len(nums); i++ {
-		rmIdx := sort.Search(k,
-			func(j int) bool { return nums[i-k] <= mark[j] })
-		for i := rmIdx; i < k-1; i++ {
-			mark[i] = mark[i+1]
-		}
-		adIdx := sort.Search(k-1,
-			func(j int) bool { return nums[i] <= mark[j] })
-		for j := k - 1; j > adIdx; j-- {
-			mark[j] = mark[j-1]
-		}
-		mark[adIdx] = nums[i]
+		insert, remove := nums[i], nums[i-k]
+		rmIdx := sort.Search(k, func(j int) bool { return remove <= mark[j] })
+		copy(mark[rmIdx:len(mark)-1], mark[rmIdx+1:])
+		isIdx := sort.Search(k-1, func(j int) bool { return insert <= mark[j] })
+		copy(mark[isIdx+1:k], mark[isIdx:k-1])
+		mark[isIdx] = insert
 		result = append(result, mid(mark))
 	}
 	return result
