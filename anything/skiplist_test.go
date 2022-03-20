@@ -2,24 +2,19 @@ package anything
 
 import (
 	"fmt"
+	"math/rand"
 	"testing"
 )
 
 func TestSkipList(t *testing.T) {
 	s := Constructor()
-	s.Add(1)
-	s.Add(2)
-	s.Add(3)
+	for i := 1; i <= 20; i++ {
+		s.Add(i)
+		if rand.Float64() < 0.5 {
+			s.Add(i)
+		}
+	}
 	fmt.Println(&s)
-	fmt.Println(s.Search(0))
-	s.Add(4)
-	fmt.Println(&s)
-	fmt.Println(s.Search(1))
-	fmt.Println(s.Erase(0))
-	fmt.Println(&s)
-	fmt.Println(s.Erase(1))
-	fmt.Println(&s)
-	fmt.Println(s.Search(1))
 	//fmt.Println("************inserted**************")
 	//for i := 0; i < len(s.Head.Next); i++ {
 	//	s.PrintLevel(i)

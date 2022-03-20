@@ -125,37 +125,15 @@ func (s *Skiplist) String() string {
 		buf.WriteString("head")
 		var emtpyCnt int
 		for idx := 0; idx < length; idx++ {
-			if idx != length-1 {
-				if mark[level][idx] != 0 {
-					buf.WriteString(fmt.Sprintf("%s->%03d", strings.Repeat(strings.Repeat("-", 5), emtpyCnt), mark[level][idx]))
-					emtpyCnt = 0
-				} else {
-					emtpyCnt += 1
-				}
+			if mark[level][idx] != 0 {
+				buf.WriteString(fmt.Sprintf("%s->%03d", strings.Repeat(strings.Repeat("-", 5), emtpyCnt), mark[level][idx]))
+				emtpyCnt = 0
 			} else {
-				if mark[level][idx] != 0 {
-					buf.WriteString(fmt.Sprintf("%s->%03d", strings.Repeat(strings.Repeat("-", 5), emtpyCnt), mark[level][idx]))
-					emtpyCnt = 0
-				} else {
-					emtpyCnt += 1
-				}
+				emtpyCnt += 1
 			}
 		}
 		buf.WriteString(fmt.Sprintf("%s->nil", strings.Repeat(strings.Repeat("-", 5), emtpyCnt)))
 		buf.WriteString("\n")
 	}
 	return buf.String()
-}
-
-func (s *Skiplist) PrintLevel(i int) {
-	cur := s.Head.Next[i]
-	for cur != nil {
-		if cur.Next[i] == nil {
-			fmt.Printf("%d\n", cur.Key)
-			return
-		} else {
-			fmt.Printf("%d -> ", cur.Key)
-			cur = cur.Next[i]
-		}
-	}
 }
