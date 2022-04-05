@@ -1,99 +1,109 @@
 package leetcode
 
-import "fmt"
+import (
+	"bytes"
+	"fmt"
+)
 
 type lruNode struct {
 	prev, next *lruNode
-	key, val   int
+	key, value int
+}
+
+type list struct {
+	headDummy, tailDummy *lruNode
+}
+
+func (l *list) saveToHead(node *lruNode) {
+	next := l.headDummy.next
+	// move node to head
+	l.headDummy.next = node
+	node.prev = l.headDummy
+
+	node.next = next
+	next.prev = node
+}
+
+func (l *list) remove(node *lruNode) {
+	node.prev.next, node.next.prev = node.next, node.prev
+	node.next = nil
+	node.next = nil
+}
+
+func (l *list) tail() *lruNode {
+	if l.headDummy.next != l.tailDummy {
+		return l.tailDummy.prev
+	}
+	return nil
+}
+
+func (l *list) head() *lruNode {
+	if l.headDummy.next != l.tailDummy {
+		return l.headDummy.next
+	}
+	return nil
+}
+
+func (l *list) String() string {
+	buf := new(bytes.Buffer)
+	for node := l.head(); node != l.tailDummy; node = node.next {
+		buf.WriteString(fmt.Sprintf("-> %d(%d)", node.key, node.value))
+	}
+	return buf.String()
 }
 
 type LRUCache struct {
-	m                    map[int]*lruNode
-	length, cap          int
-	dummyHead, dummyTail *lruNode
+	list             *list
+	nodes            map[int]*lruNode
+	capacity, length int
 }
 
 func Constructor(capacity int) LRUCache {
-	head, tail := &lruNode{}, &lruNode{}
-	head.next, tail.prev = tail, head
+	head, tail := new(lruNode), new(lruNode)
+	head.next, tail.next = tail, head
 	return LRUCache{
-		m:         make(map[int]*lruNode),
-		length:    0,
-		cap:       capacity,
-		dummyHead: head,
-		dummyTail: tail,
+		list:     &list{headDummy: head, tailDummy: tail},
+		nodes:    make(map[int]*lruNode),
+		capacity: capacity,
 	}
 }
-func (this *LRUCache) moveToHead(node *lruNode) {
-	if node == this.dummyHead.next {
-		return
-	}
-	// ! node < !
-	node.prev.next, node.next.prev = node.next, node.prev
 
-	head := this.dummyHead.next
-	// dummyHead -> node-> head
-	this.dummyHead.next, node.next = node, head
-	// dummyHead <- node <- head
-	head.prev, node.prev = node, this.dummyHead
+func (this *LRUCache) moveToHead(node *lruNode) {
+	this.list.remove(node)
+	this.list.saveToHead(node)
 }
 
 func (this *LRUCache) Get(key int) int {
-	if node, ok := this.m[key]; ok {
+	if node, ok := this.nodes[key]; ok {
 		this.moveToHead(node)
-		return node.val
+		return node.value
 	}
 	return -1
 }
 
-func (this *LRUCache) Put(key int, value int) {
-	if node, ok := this.m[key]; ok {
-		this.moveToHead(node)
-		node.val = value
-		return
-	}
-
-	head := this.dummyHead.next
-	node := &lruNode{key: key, val: value}
-	// add data to map
-	this.m[key] = node
-
-	// add data to linked list
-	// dummyHead -> node-> head
-	this.dummyHead.next, node.next = node, head
-	// dummyHead <- node <- head
-	head.prev, node.prev = node, this.dummyHead
-
-	if this.length < this.cap {
-		this.length += 1
-		return
-	}
-
-	// remove tail
-	tail := this.dummyTail.prev
-	// delete data from map
-	delete(this.m, tail.key)
-	// delete data from linked map
-	tail.prev.next, tail.next.prev = tail.next, tail.prev
-
-	tail.prev = nil
-	tail.next = nil
+func (this *LRUCache) add(node *lruNode) {
+	this.nodes[node.key] = node
+	this.list.saveToHead(node)
 }
 
-/**
- * Your LRUCache object will be instantiated and called as such:
- * obj := Constructor(capacity);
- * param_1 := obj.Get(key);
- * obj.Put(key,value);
- */
-func (this *LRUCache) print() {
-	head := this.dummyHead.next
-	for {
-		if head.next == this.dummyTail {
-			fmt.Printf("(%d, %d)", head.key, head.val)
-			break
-		}
-		fmt.Printf("(%d, %d) => ", head.key, head.val)
-		head = head.next
+func (this *LRUCache) remove(node *lruNode) {
+	delete(this.nodes, node.key)
+	this.list.remove(node)
+}
+
+func (this *LRUCache) Put(key int, value int) {
+	if node, ok := this.nodes[key]; ok {
+		node.value = value
+		this.moveToHead(node)
+		return
+	}
+	node := &lruNode{key: key, value: value}
+	this.add(node)
+	this.length += 1
+	if this.length > this.capacity {
+		node := this.list.tail()
+		this.remove(node)
+		this.length -= 1
+		return
 	}
 }
