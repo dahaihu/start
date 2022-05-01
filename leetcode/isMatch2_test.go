@@ -6,5 +6,5 @@ import (
 )
 
 func TestIsMatch2(t *testing.T) {
-	fmt.Println(isMatch2("acdcb", "a*c?b"))
+	fmt.Println(isMatch2("adceb", "*a*b"))
 }

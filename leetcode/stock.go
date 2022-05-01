@@ -25,7 +25,7 @@ func maxProfit2(prices []int) int {
 	profit := 0
 	pre := prices[0]
 	for _, price := range prices[1:] {
-		if tmp := price-pre; tmp > 0 {
+		if tmp := price - pre; tmp > 0 {
 			profit += tmp
 		}
 		pre = price
@@ -34,23 +34,19 @@ func maxProfit2(prices []int) int {
 }
 
 func maxProfit3(times int, prices []int) int {
-	if len(prices) <= 1 {
-		return 0
-	}
 	mark := make([][]int, times+1)
 	for i := 0; i <= times; i++ {
 		mark[i] = make([]int, len(prices))
 	}
-	for time := 1; time <= times; time++ {
+	for curTime := 1; curTime <= times; curTime++ {
 		preMax := -prices[0]
-		for day := 1; day < len(prices); day++ {
-			if tmp := mark[time-1][day-1] - prices[day]; tmp > preMax {
-				preMax = tmp
+		for idx := 1; idx < len(prices); idx++ {
+			if cur := mark[curTime-1][idx-1] - prices[idx]; cur > preMax {
+				preMax = cur
 			}
-			if tmp := preMax + prices[day]; tmp > mark[time][day-1] {
-				mark[time][day] = tmp
-			} else {
-				mark[time][day] = mark[time][day-1]
+			mark[curTime][idx] = mark[curTime][idx-1]
+			if cur := preMax + prices[idx]; cur > mark[curTime][idx] {
+				mark[curTime][idx] = cur
 			}
 		}
 	}

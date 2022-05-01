@@ -1,10 +1,18 @@
-from __future__ import division
-import matplotlib.pyplot as plt
-import networkx as nx
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        lookup = set()
+        left = 0
+        curLen, maxLen = 0, 0
+        for ele in s:
+            while ele in lookup:
+                lookup.remove(s[left])
+                left += 1
+            lookup.add(ele)
+            curLen = len(lookup)
+            if curLen > maxLen:
+                maxLen = curLen
+        return maxLen
 
-DG = nx.DiGraph()
-edges = [(i, i+1, 1) for i in range(3)] + [(3, 0, 1)]
-DG.add_weighted_edges_from(edges)
-subax1 = plt.subplot(121)
-nx.draw(DG, with_labels=True, font_weight='bold')
-plt.show()
+
+if __name__ == '__main__':
+    print(Solution().lengthOfLongestSubstring( "abcabcbb"))

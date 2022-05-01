@@ -16,4 +16,5 @@ func TestLengthOfLISBest(t *testing.T) {
 
 func TestPosition(t *testing.T) {
 	fmt.Println(position([]int{0, 6, 7}, 5))
+	fmt.Println(position([]int{1, 3, 3}, 2))
 }

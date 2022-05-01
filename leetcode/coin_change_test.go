@@ -25,5 +25,5 @@ func Test_ArrayPointer(t *testing.T) {
 }
 
 func Test_FromTopToBottom(t *testing.T) {
-	fmt.Println(coinChange([]int{2}, 3))
+	fmt.Println(coinChange([]int{1, 2, 5}, 11))
 }

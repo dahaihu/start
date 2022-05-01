@@ -1,26 +1,84 @@
 package leetcode
 
-import "fmt"
+/*
+给定一个未排序的整数数组 nums ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。
+
+请你设计并实现时间复杂度为 O(n) 的算法解决此问题。
+
+
+
+示例 1：
+
+输入：nums = [100,4,200,1,3,2]
+输出：4
+解释：最长数字连续序列是 [1, 2, 3, 4]。它的长度为 4。
+示例 2：
+
+输入：nums = [0,3,7,2,5,8,4,6,0,1]
+输出：9
+
+
+提示：
+
+0 <= nums.length <= 105
+-109 <= nums[i] <= 109
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/longest-consecutive-sequence
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+*/
+
+type margin struct {
+	left, right int
+}
 
 func longestConsecutive(nums []int) int {
-	mark := make(map[int]int)
-	res := 0
+	if len(nums) <= 1 {
+		return len(nums)
+	}
+	result := 1
+	mark := make(map[int]*margin, len(nums))
 	for _, num := range nums {
-		if _, ok := mark[num]; !ok {
-			left := mark[num-1]
-			right := mark[num+1]
-			cur := left + right + 1
-			if cur > res {
-				res = cur
-			}
-			// 这个地方的更新还是很有意思的？
-			// 什么场景进行更新呢？
-			//mark[num] = cur
-			mark[num] = cur
-			mark[num-left] = cur
-			mark[num+right] = cur
-			fmt.Println("updated mark", mark)
+		if _, ok := mark[num]; ok {
+			continue
+		}
+		mark[num] = &margin{num, num}
+		left, leftOk := mark[num-1]
+		right, rightOk := mark[num+1]
+		if leftOk && rightOk {
+			mark[left.left].right = mark[right.right].right
+			mark[right.right].left = mark[left.left].left
+			mark[num].left = mark[left.left].left
+			mark[num].right = mark[right.right].right
+		} else if leftOk {
+			mark[left.left].right = num
+			mark[num].left = left.left
+		} else if rightOk {
+			mark[right.right].left = mark[num].left
+			mark[num].right = right.right
+		}
+		if curLength := mark[num].right - mark[num].left + 1; curLength > result {
+			result = curLength
 		}
 	}
-	return res
+	return result
+}
+
+func standardLongestConsecutive(nums []int) int {
+	var result int
+	mark := make(map[int]int, len(nums))
+	for _, num := range nums {
+		if _, ok := mark[num]; ok {
+			continue
+		}
+		leftLen, rightLen := mark[num-1], mark[num+1]
+		curLen := leftLen + 1 + rightLen
+		if curLen > result {
+			result = curLen
+		}
+		mark[num-leftLen] = curLen
+		mark[num] = curLen
+		mark[num+rightLen] = curLen
+	}
+	return result
 }

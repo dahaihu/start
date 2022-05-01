@@ -11,6 +11,6 @@ func Test_jump(t *testing.T) {
 }
 
 func Test_canJump(t *testing.T) {
-	fmt.Println(canJump([]int{3, 2, 1, 0, 1}) == false)
-	fmt.Println(canJump([]int{3, 2, 1, 1, 1}) == true)
+	fmt.Println(canJump([]int{3, 2, 1, 0, 1}))
+	fmt.Println(canJump([]int{3, 2, 1, 1, 1}))
 }
