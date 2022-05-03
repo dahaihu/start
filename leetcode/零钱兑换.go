@@ -9,7 +9,7 @@ const Unreachable = math.MaxInt64
 
 // how to initiate
 func coinChange(coins []int, amount int) int {
-	sort.Slice(coins, func(i, j int) bool {return coins[i] <= coins[j]})
+	sort.Slice(coins, func(i, j int) bool { return coins[i] <= coins[j] })
 	mark := make([]int, amount+1)
 	for i := 1; i <= amount; i++ {
 		mark[i] = Unreachable
