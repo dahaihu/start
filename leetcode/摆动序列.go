@@ -1,29 +1,28 @@
 package leetcode
 
+func status(val int) int {
+	if val > 0 {
+		return 1
+	} else if val < 0 {
+		return -1
+	} else {
+		return 0
+	}
+}
+
 func wiggleMaxLength(nums []int) int {
-	const (
-		bigger  = 1
-		equal   = 0
-		smaller = -1
-	)
-	preStatus := 100
+	if len(nums) == 0 {
+		return 0
+	}
 	count := 1
+	preStatus := 100
 	for i := 1; i < len(nums); i++ {
-		if nums[i] == nums[i-1] {
+		curStatus := status(nums[i] - nums[i-1])
+		if curStatus == preStatus || curStatus == 0 {
 			continue
 		}
-		var status int
-		if nums[i] > nums[i-1] {
-			status = bigger
-		} else {
-			status = smaller
-		}
-		if preStatus == status {
-			continue
-		} else {
-			count += 1
-			preStatus = status
-		}
+		preStatus = curStatus
+		count += 1
 	}
 	return count
 }
