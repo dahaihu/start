@@ -6,5 +6,5 @@ import (
 )
 
 func TestSubset2(t *testing.T) {
-	fmt.Println(subsetsWithDup([]int{1, 2, 2, 2}))
+	fmt.Println(subsetsWithDup([]int{1, 2}))
 }

@@ -2,6 +2,7 @@ package leetcode
 
 import (
 	"fmt"
+	"sort"
 	"testing"
 )
 
@@ -28,12 +29,21 @@ func TestHeap(t *testing.T) {
 }
 
 func TestScheduler(t *testing.T) {
-	fmt.Println(leastIntervalBetter(
-		[]byte{'A', 'A', 'A', 'E', 'F', 'G'},
+	fmt.Println(leastInterval2(
+		[]byte{'A', 'A', 'A', 'A', 'A', 'A', 'B', 'C', 'D', 'E', 'F', 'G'},
 		2,
 	))
 }
 
+func TestSearchBinary(t *testing.T) {
+	data := []int{1, 2, 3, 4}
+	fmt.Println(sort.Search(len(data), func(i int) bool { return data[i] >= 4 }))
+}
+
 func TestChars(t *testing.T) {
 	fmt.Println('Z' - 'A')
+}
+
+func TestMargin(t *testing.T) {
+	fmt.Println([]int{1, 2, 3}[3:])
 }

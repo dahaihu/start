@@ -7,5 +7,4 @@ import (
 
 func TestIsMatch(t *testing.T) {
 	fmt.Println(IsMatch("aaa", ".*"))
-	fmt.Println(IsMatch("aab", "c*a*b"))
 }

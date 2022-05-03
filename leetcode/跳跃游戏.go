@@ -5,16 +5,13 @@ import (
 )
 
 func canJump(nums []int) bool {
-	maxPos := 0
-	for i := 0; i < len(nums); i++ {
-		if i > maxPos {
+	margin := 0
+	for idx, num := range nums {
+		if idx > margin {
 			return false
 		}
-		if next := i + nums[i]; next > maxPos {
-			maxPos = next
-		}
-		if maxPos >= len(nums)-1 {
-			return true
+		if next := idx + num; next > margin {
+			margin = next
 		}
 	}
 	return true

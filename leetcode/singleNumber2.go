@@ -29,13 +29,9 @@ package leetcode
 */
 
 func singleNumber2(nums []int) int {
-	// 00 -> 01 -> 10 -> 11(00)
-	// 碰到11就转化为00
-	// 0 异或 任何数 都等于任何数本身
 	var one, two int
 	for _, num := range nums {
 		two |= one & num
-		// 异或的操作和没有进位的加号是一致的
 		one ^= num
 		three := one & two
 		one &= ^three

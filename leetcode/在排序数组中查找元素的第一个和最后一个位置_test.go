@@ -1,8 +1,9 @@
 package leetcode
 
 import (
-	"github.com/go-playground/assert/v2"
 	"testing"
+
+	"github.com/go-playground/assert/v2"
 )
 
 func TestSearchRange(t *testing.T) {

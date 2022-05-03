@@ -1,5 +1,7 @@
 package leetcode
 
+import "fmt"
+
 /**
 * @Author: 胡大海
 * @Date: 2019-11-10 12:15
@@ -57,30 +59,57 @@ p = "mis*is*p*."
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 */
 
-// todo 写一个带着图的博客
 func IsMatch(s string, p string) bool {
-	sLen, pLen := len(s), len(p)
-	mark := make([][]bool, sLen+1)
-	for i := 0; i < sLen+1; i++ {
-		mark[i] = make([]bool, pLen+1)
+	mark := make([][]bool, len(p)+1)
+	for i := 0; i < len(p)+1; i++ {
+		mark[i] = make([]bool, len(s)+1)
 	}
 	mark[0][0] = true
-	for i := 2; i < pLen+1; i++ {
+
+	for i := 1; i < len(p)+1; i++ {
 		if p[i-1] == '*' {
-			mark[0][i] = mark[0][i-2]
+			mark[i][0] = mark[i-2][0]
 		}
 	}
-	for sIdx := 1; sIdx < sLen+1; sIdx++ {
-		for pIdx := 1; pIdx < pLen+1; pIdx++ {
-			if s[sIdx-1] == p[pIdx-1] || p[pIdx-1] == '.' {
-				mark[sIdx][pIdx] = mark[sIdx-1][pIdx-1]
-			} else if p[pIdx-1] == '*' {
-				mark[sIdx][pIdx] = mark[sIdx][pIdx-1] || mark[sIdx][pIdx-2]
-				if s[sIdx-1] == p[pIdx-2] || p[pIdx-2] == '.' {
-					mark[sIdx][pIdx] = mark[sIdx][pIdx] || mark[sIdx-1][pIdx]
+
+	for pPos := 1; pPos <= len(p); pPos++ {
+		for sPos := 1; sPos <= len(s); sPos++ {
+			if s[sPos-1] == p[pPos-1] || p[pPos-1] == '.' {
+				mark[pPos][sPos] = mark[pPos-1][sPos-1]
+			} else if p[pPos-1] == '*' {
+				mark[pPos][sPos] = mark[pPos-2][sPos]
+				if p[pPos-2] == s[sPos-1] || p[pPos-2] == '.' {
+					mark[pPos][sPos] = mark[pPos][sPos] || mark[pPos][sPos-1]
 				}
 			}
 		}
 	}
-	return mark[sLen][pLen]
+	return mark[len(p)][len(s)]
+}
+
+func IsMatch2(s string, p string) bool {
+	mark := make([][]bool, len(p)+1)
+	for i := 0; i < len(p)+1; i++ {
+		mark[i] = make([]bool, len(s)+1)
+	}
+	mark[0][0] = true
+
+	for i := 1; i < len(p)+1; i++ {
+		if p[i-1] == '*' {
+			mark[i][0] = mark[i-1][0]
+		}
+	}
+
+	for pPos := 1; pPos <= len(p); pPos++ {
+		for sPos := 1; sPos <= len(s); sPos++ {
+			if s[sPos-1] == p[pPos-1] || p[pPos-1] == '?' {
+				mark[pPos][sPos] = mark[pPos-1][sPos-1]
+			} else if p[pPos-1] == '*' {
+				mark[pPos][sPos] = mark[pPos-1][sPos] ||
+					mark[pPos][sPos-1]
+			}
+		}
+	}
+	fmt.Println(mark)
+	return mark[len(p)][len(s)]
 }

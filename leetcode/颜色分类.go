@@ -7,18 +7,17 @@ const (
 )
 
 func sortColors(nums []int) {
-	redPos, bluePos := 0, len(nums)-1
-	var idx int
-	for idx <= bluePos {
-		if nums[idx] == red {
-			nums[idx], nums[redPos] = nums[redPos], nums[idx]
-			idx += 1
-			redPos += 1
-		} else if nums[idx] == blue {
-			nums[idx], nums[bluePos] = nums[bluePos], nums[idx]
-			bluePos -= 1
+	nextRed, nextBlue := 0, len(nums)-1
+	for i := 0; i <= nextBlue; {
+		if nums[i] == red {
+			nums[i], nums[nextRed] = nums[nextRed], nums[i]
+			nextRed += 1
+			i += 1
+		} else if nums[i] == blue {
+			nums[i], nums[nextBlue] = nums[nextBlue], nums[i]
+			nextBlue -= 1
 		} else {
-			idx += 1
+			i += 1
 		}
 	}
 }

@@ -26,16 +26,17 @@ func twoThreadPrint(times int) {
 	var wg sync.WaitGroup
 	wg.Add(1)
 	go func() {
-		defer wg.Done()
 		for i := 0; i < times; i++ {
 			<-two
 			fmt.Println(2)
 			if i == times-1 {
 				close(one)
+				close(two)
 				break
 			}
 			one <- signal
 		}
+		wg.Done()
 	}()
 	one <- signal
 	wg.Wait()
@@ -44,16 +45,22 @@ func twoThreadPrint(times int) {
 func twoThreadPrintUsingSignal() {
 	var num int
 	cond := sync.NewCond(new(sync.Mutex))
-	count := 10
+	count := 2
 	for i := 0; i < count; i++ {
 		go func(idx int) {
 			for {
 				cond.L.Lock()
-				for idx != num {
+				for  {
+					fmt.Printf("nocondition: idx %d get num %d\n", idx, num)
+					if num == idx {
+						break
+					}
 					cond.Wait()
 				}
-				fmt.Println(idx)
-				num = (idx + 1) % count
+				fmt.Printf("condition: idx %d get %d\n", idx, num)
+				if num = num + 1; num == count {
+					num = 0
+				}
 				cond.Broadcast()
 				cond.L.Unlock()
 			}

@@ -6,7 +6,7 @@ import (
 )
 
 func TestSortColors(t *testing.T) {
-	original := []int{0, 1, 2, 1}
+	original := []int{0, 1, 0}
 	sortColors(original)
 	fmt.Println(original)
 }

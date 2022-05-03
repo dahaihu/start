@@ -1,6 +1,7 @@
 package leetcode
 
 import "sort"
+
 func fourSum(nums []int, target int) [][]int {
 	sort.Ints(nums)
 	res := make([][]int, 0, 10)

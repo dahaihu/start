@@ -1,7 +1,5 @@
 package leetcode
 
-import "fmt"
-
 func maximalSquare(matrix [][]byte) int {
 	dp := make([][]int, len(matrix))
 	maxLength := 0
@@ -24,7 +22,5 @@ func maximalSquare(matrix [][]byte) int {
 			}
 		}
 	}
-	fmt.Println("dp is ")
-	fmt.Println(dp)
 	return maxLength * maxLength
 }
