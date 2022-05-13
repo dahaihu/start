@@ -39,44 +39,32 @@ func curBinarySearch(nums []int, target int) int {
 
 func nextNumber(candidates []int, target int) int {
 	sort.Ints(candidates)
-	targetItems := splitInt(target)
-	next := make([]int, 0, len(targetItems))
-	var reverseIdx int
-	for idx := len(targetItems) - 1; idx >= 0; idx-- {
-		cur := targetItems[idx]
-		if idx == 0 {
-			if cur > candidates[0] {
-				ci := curBinarySearch(candidates, cur-1)
-				next = append(next, candidates[ci])
-			} else {
-				reverseIdx = len(next) - 1
-				next = append(next, candidates[len(candidates)-1])
-				goto reverse
-			}
-		} else if cur < candidates[0] {
-			reverseIdx = len(next) - 1
-			for i := idx; i >= 0; i-- {
-				next = append(next, candidates[len(candidates)-1])
-			}
-			goto reverse
-		} else {
-			ci := curBinarySearch(candidates, cur)
-			next = append(next, candidates[ci])
+	items := splitInt(target)
+	suited := -1
+	for i := 0; i < len(items); i++ {
+		cur := items[i]
+		if cur < candidates[len(candidates)-1] {
+			biggerIdx := sort.Search(len(candidates), func(i int) bool { return cur < candidates[i] })
+			items[i] = candidates[biggerIdx]
+			suited = i
+			break
 		}
 	}
-	goto end
-reverse:
-	for i := reverseIdx; i >= 0; i-- {
-		cur := next[i]
-		if cur > candidates[0] {
-			ci := curBinarySearch(candidates, cur-1)
-			next[i] = candidates[ci]
-			goto end
-		} else {
-			next[i] = candidates[len(candidates)-1]
+	var out []int
+	if suited == -1 {
+		out = make([]int, len(items)+1)
+		for i := 0; i < len(out); i++ {
+			out[i] = candidates[0]
 		}
+	} else {
+		for i := 0; i < suited; i++ {
+			items[i] = candidates[0]
+		}
+		out = items
 	}
-	next = next[1:]
-end:
-	return toInt(next)
+	var res int
+	for i := len(out) - 1; i >= 0; i-- {
+		res = res*10 + out[i]
+	}
+	return res
 }
