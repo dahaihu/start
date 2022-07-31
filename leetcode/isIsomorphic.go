@@ -2,12 +2,12 @@ package leetcode
 
 var palceHolder = struct{}{}
 
-type omorphic struct {
+type isomorphic struct {
 	mapping       map[byte]byte
 	existedTarget map[byte]struct{}
 }
 
-func (o omorphic) safeAndAdd(original byte, target byte) bool {
+func (o isomorphic) safeAndAdd(original byte, target byte) bool {
 	pre, ok := o.mapping[original]
 	if ok {
 		if pre != target {
@@ -24,8 +24,8 @@ func (o omorphic) safeAndAdd(original byte, target byte) bool {
 	return true
 }
 
-func newOmorphic() *omorphic {
-	return &omorphic{
+func newIsomorphic() *isomorphic {
+	return &isomorphic{
 		mapping:       make(map[byte]byte),
 		existedTarget: make(map[byte]struct{}),
 	}
@@ -36,7 +36,7 @@ func isIsomorphic(s string, t string) bool {
 	if sL != tL {
 		return false
 	}
-	mark := newOmorphic()
+	mark := newIsomorphic()
 	for i := 0; i < sL; i++ {
 		if !mark.safeAndAdd(s[i], t[i]) {
 			return false
